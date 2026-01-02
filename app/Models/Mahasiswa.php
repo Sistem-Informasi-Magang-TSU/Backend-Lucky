@@ -15,6 +15,7 @@ class Mahasiswa extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'user_id',
         'nim',
         'prodi',
         'angkatan',
@@ -56,4 +57,12 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(TranskripMagang::class, 'nim', 'nim');
     }
+
+    // relasi tabel user untuk pengambilan nim
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
+
+

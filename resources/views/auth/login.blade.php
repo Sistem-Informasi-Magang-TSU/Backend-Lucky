@@ -13,9 +13,9 @@
             theme: {
                 extend: {
                     colors: {
-                        'tsu-teal': '#086375',       // Warna utama tombol & logo
+                        'tsu-teal': '#086375',
                         'tsu-teal-dark': '#064e5c',
-                        'tsu-blue-link': '#2563eb',  // Warna link lupa password
+                        'tsu-blue-link': '#2563eb',
                     },
                     fontFamily: {
                         'sans': ['Poppins', 'sans-serif'],
@@ -56,19 +56,18 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
             </p>
 
-            <form action="{{ route('dashboard') }}" method="POST" class="space-y-5 w-full max-w-md">
-                
-                {{-- Ubah method dari POST menjadi GET, dan action mengarah ke rute program --}}
+            <form action="{{ route('login.process') }}" method="POST">
+                    @csrf
                 
                 <div>
                     <label class="block text-black font-medium text-sm mb-2">Email</label>
-                    <input type="email" placeholder="Masukkan Email WAJIB Berdomain @tsu.ac.id" 
+                    <input type="email" name="email" placeholder="Masukkan Email WAJIB Berdomain @tsu.ac.id" 
                         class="w-full border border-gray-400 px-4 py-3 rounded text-sm placeholder-gray-400 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
                 </div>
 
                 <div>
                     <label class="block text-black font-medium text-sm mb-2">Password</label>
-                    <input type="password" placeholder="Masukkan Password" 
+                    <input type="password" name="password" placeholder="Masukkan Password" 
                         class="w-full border border-gray-400 px-4 py-3 rounded text-sm placeholder-gray-400 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
                 </div>
 

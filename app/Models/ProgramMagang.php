@@ -13,7 +13,7 @@ class ProgramMagang extends Model
 
     protected $fillable = [
         'id_program', 'nama_program', 'jenis_bkp',
-        'id_mitra', 'periode', 'kuota',
+        'id_mitra', 'periode', 'kuota', 'lokasi_penempatan',
         'syarat', 'deskripsi_silabus', 'dampak_program'
     ];
 

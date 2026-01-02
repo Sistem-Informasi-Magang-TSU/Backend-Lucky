@@ -58,4 +58,21 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    // relasi untuk pengambilan informasi (nim) di profile
+    public function mahasiswa()
+        {
+            return $this->hasOne(Mahasiswa::class);
+        }
+
+    public function getDisplayIdentityAttribute()
+        {
+            if ($this->role === 'mahasiswa') {
+                return $this->mahasiswa?->nim;
+            }
+
+            return ucfirst($this->role);
+        }
+
+
 }

@@ -25,6 +25,7 @@ class ProgramMagangController extends Controller
                 'id_program'        => 'required|string|max:8|unique:program_magang,id_program',
                 'nama_program'      => 'required|string|max:100',
                 'jenis_bkp'         => 'required|string|max:50',
+                'lokasi_penempatan' => 'required|string|max:254',
                 'id_mitra'          => 'required|string|exists:mitra,id_mitra',
                 'periode'           => 'required|string|max:20',
                 'kuota'             => 'required|integer|min:1',

@@ -15,9 +15,11 @@ return new class extends Migration
             $table->char('id_program', 8)->primary();
             $table->string('nama_program', 100);
             $table->string('jenis_bkp', 50);
+            $table->string('lokasi_penempatan', 254);
             $table->char('id_mitra', 8);
             $table->string('periode', 20);
             $table->integer('kuota')->nullable();
+            $table->string('lokasi_penempatan');
             $table->text('syarat')->nullable();
             $table->text('deskripsi_silabus')->nullable();
             $table->text('dampak_program')->nullable();

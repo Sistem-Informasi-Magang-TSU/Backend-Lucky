@@ -7,6 +7,8 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,8 +41,8 @@
 
         <h1 class="text-2xl font-bold text-black mb-8">Ubah Kata Sandi</h1>
 
-        <form action="{{ route('login') }}" method="GET" class="w-full max-w-md text-left space-y-5">
-            
+        <form id="formReset" onsubmit="handleReset(event)" class="w-full max-w-md text-left space-y-5">
+        @csrf  
             <div>
                 <label class="block text-black font-semibold text-sm mb-2 ml-1">Kata Sandi Baru</label>
                 <input type="password" placeholder="Masukkan Kata Sandi Baru" 
@@ -49,18 +51,33 @@
 
             <div class="mb-8">
                 <label class="block text-black font-semibold text-sm mb-2 ml-1">Konfirmasi Kata Sandi</label>
-                <input type="password" placeholder="Masukkan Kembali Kata Sandi" 
+                <input type="password" placeholder="Masukkan Kembali Kata Sandi Baru" 
                     class="w-full border border-gray-400 px-4 py-3 rounded text-sm placeholder-gray-300 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
             </div>
 
             <div class="pt-4">
                 <button type="submit" class="w-full bg-tsu-teal text-white font-bold py-3 rounded-lg hover:bg-tsu-teal-dark transition shadow-md text-base">
-                    Verifikasi Kode
+                    Ubah Sekarang
                 </button>
             </div>
             
         </form>
     </div>
 
+    <script>
+    function handleReset(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Sandi Berhasil Diubah!',
+            text: 'Silakan masuk kembali dengan kata sandi baru Anda.',
+            icon: 'success',
+            confirmButtonColor: '#086375',
+            confirmButtonText: 'Ke Halaman Login'
+        }).then((result) => {
+            window.location.href = "{{ url('/login') }}";
+        });
+    }
+    </script>
+    
 </body>
 </html>

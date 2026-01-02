@@ -117,6 +117,11 @@
 
             <div class="flex items-center gap-3 font-medium">
                 <img src="/images/ic_call.svg" class="h-6"> 
+                <span>+62 123 456 789 (Admin)</span>
+            </div>
+
+            <div class="flex items-center gap-3 font-medium">
+                <img src="/images/ic_call.svg" class="h-6"> 
                 <span>+62 123 456 789 (Call Center)</span>
             </div>
 

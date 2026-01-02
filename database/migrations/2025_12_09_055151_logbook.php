@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('aktivitas');
             $table->string('lampiran', 255)->nullable();
-            $table->enum('jenis_logbook', ['harian','mingguan', 'bulanan']);
+            $table->enum('pelaksanaan_kegiatan', ['individu','kelompok']);
             $table->enum('status_validasi', ['belum divalidasi', 'divalidasi'])->default('belum divalidasi');
             $table->foreign('nim')->references('nim')->on('mahasiswa')->onDelete('cascade');
             $table->foreign('id_program')->references('id_program')->on('program_magang')->onDelete('cascade');

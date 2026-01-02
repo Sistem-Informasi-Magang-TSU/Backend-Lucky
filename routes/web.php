@@ -2,51 +2,48 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProgramMagangTampilController;
 
 
-//landing
-Route::get('/', function () {
-    return view('pages.landing');
-})->name('landing');// Tambahkan nama untuk landing page
+// Landing
+Route::get('/', fn () => view('pages.landing'))->name('landing');
 
-//Register
+// Register
 Route::get('/register', [RegisterController::class, 'show'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Login
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
 
-//forgot
-Route::get('/password', function () {
-    return view('forgot.password');
-})->name('password.request');
+// Logout (HARUS auth)
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+// cek user yang login
+Route::get('/whoami', fn () => auth()->user())
+    ->middleware('auth');
 
-Route::get('/password-otp', function () {
-    return view('forgot.password-otp');
-})->name('password.otp');
+// Semua halaman yang butuh login
+Route::middleware('auth')->group(function () {
 
-Route::get('/password-reset', function () {
-    return view('forgot.password-reset');
-})->name('password.reset');
+    Route::get('/dashboard', fn () => view('pages.dashboard.dashboard'))
+->name('dashboard');
 
-//main
-Route::get('/dashboard', function () {
-    return view('pages/dashboard.dashboard');
-})->name('dashboard');
+    Route::get('/dashboard/detail/{id}', function ($id) {
+        return view('pages.dashboard.dashboard-detail', compact('id'));})->name('dashboard.detail');
 
-Route::get('/dashboard/detail/{id}', function ($id) {
-    return view('pages./dashboard.dashboard-detail', compact('id')); 
-})->name('dashboard.detail');
+    // password change
+    Route::post('/password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
 
-Route::get('/logbook', function () {
-    return view('pages/logbook.logbook');
-})->name('logbook');
 
-Route::get('/penilaian', function () {
-    return view('pages.penilaian'); 
-})->name('penilaian');
 
-Route::get('/pembimbing', function () {
-    return view('pages.pembimbing');
-})->name('pembimbing');
+    Route::get('/logbook', fn () => view('pages.logbook.logbook'))->name('logbook');
+    Route::get('/setting', fn () => view('pages.setting'))->name('setting');
+    Route::get('/program', [ProgramMagangTampilController::class, 'index'])->name('program.index');
+    Route::get('/program/{id_program}', [ProgramMagangTampilController::class, 'show'])->name('program.show');
+    Route::get('/penilaian', fn () => view('pages.penilaian.penilaian'))->name('penilaian');
+    Route::get('/pembimbing', fn () => view('pages.pembimbing.pembimbing'))->name('pembimbing');
+});
