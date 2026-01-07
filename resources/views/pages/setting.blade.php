@@ -185,6 +185,11 @@
             <h3 class="fade-up text-2xl font-black text-gray-800 mb-2">Dokumen Pendukung</h3>
             <p class="fade-up delay-100 text-gray-500 mb-10 italic">Lengkapi dokumen di bawah ini agar tombol "Daftar Magang" dapat diakses.</p>
             
+            <form action="{{ route('documents.store') }}"
+                method="POST"
+                enctype="multipart/form-data">
+                @csrf
+
             <div class="fade-up delay-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="p-6 border-2 border-dashed border-gray-200 rounded-[2rem] hover:border-tsu-teal transition group flex flex-col justify-between">
                     <div>
@@ -194,16 +199,27 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800">File CV</h4>
-                                <p id="cv-status" class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @if($user->berkas?->cv_file)
+                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                @else
+                                    <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @endif
+
                             </div>
                         </div>
-                        <div id="preview-container-cv" class="hidden mb-3">
-                            <button type="button" onclick="previewPDF('cv_file')" class="text-xs text-tsu-teal underline font-bold">👁 Pratinjau CV</button>
-                        </div>
+                        @if($user->berkas?->cv_file)
+                            <div class="mb-3">
+                                <a href="{{ asset('storage/'.$user->berkas->cv_file) }}"
+                                target="_blank"
+                                class="text-xs text-tsu-teal underline font-bold">
+                                    👁 Pratinjau CV
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <div>
                         <label for="cv_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200">Pilih PDF</label>
-                        <input type="file" id="cv_file" class="hidden" accept=".pdf" onchange="updateFileStatus('cv-status', this)">
+                        <input type="file" id="cv_file" name="cv_file" class="hidden" accept=".pdf" onchange="updateFileStatus('cv-status', this)"> 
                     </div>
                 </div>
 
@@ -215,16 +231,26 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800">Transkrip Nilai</h4>
-                                <p id="transkrip-status" class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @if($user->berkas?->transkrip_file)
+                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                @else
+                                    <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @endif
                             </div>
                         </div>
-                        <div id="preview-container-transkrip" class="hidden mb-3">
-                            <button type="button" onclick="previewPDF('transkrip_file')" class="text-xs text-tsu-teal underline font-bold">👁 Pratinjau Transkrip</button>
-                        </div>
+                        @if($user->berkas?->transkrip_file)
+                            <div class="mb-3">
+                                <a href="{{ asset('storage/'.$user->berkas->transkrip_file) }}"
+                                target="_blank"
+                                class="text-xs text-tsu-teal underline font-bold">
+                                    👁 Pratinjau CV
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <div>
                         <label for="transkrip_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200">Pilih PDF</label>
-                        <input type="file" id="transkrip_file" class="hidden" accept=".pdf" onchange="updateFileStatus('transkrip-status', this)">
+                        <input type="file" id="transkrip_file" name="transkrip_file" class="hidden" accept=".pdf" onchange="updateFileStatus('transkrip-status', this)">
                     </div>
                 </div>
 
@@ -236,23 +262,37 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800">KRS Terbaru</h4>
-                                <p id="krs-status" class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @if($user->berkas?->krs_file)
+                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                @else
+                                    <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
+                                @endif
                             </div>
                         </div>
-                        <div id="preview-container-krs" class="hidden mb-3">
-                            <button type="button" onclick="previewPDF('krs_file')" class="text-xs text-tsu-teal underline font-bold">👁 Pratinjau KRS</button>
-                        </div>
+                        @if($user->berkas?->krs_file)
+                            <div class="mb-3">
+                                <a href="{{ asset('storage/'.$user->berkas->krs_file) }}"
+                                target="_blank"
+                                class="text-xs text-tsu-teal underline font-bold">
+                                    👁 Pratinjau CV
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <div>
                         <label for="krs_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200 transition">Pilih PDF</label>
-                        <input type="file" id="krs_file" class="hidden" accept=".pdf" onchange="updateFileStatus('krs-status', this)">
+                        <input type="file" id="krs_file" name="krs_file" class="hidden" accept=".pdf" onchange="updateFileStatus('krs-status', this)">
                     </div>
                 </div>
             </div>
+            
 
-            <button onclick="saveDocs()" class="fade-up delay-600 w-full mt-10 bg-tsu-teal text-white py-5 rounded-2xl font-black text-lg hover:bg-teal-700 transition shadow-xl shadow-teal-100">
+
+            <button type="submit"
+            class="fade-up delay-600 w-full mt-10 bg-tsu-teal text-white py-5 rounded-2xl font-black text-lg">
                 Simpan Semua Dokumen
             </button>
+            </form>
         </div>
 
     </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProgramMagangTampilController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\BerkasMahasiswaController;
 
 
 Route::get('/whoami', function () {
@@ -64,8 +65,12 @@ Route::middleware('auth')->group(function () {
      Route::put('/password', [PasswordController::class, 'update'])
         ->name('password.update');
 
-        Route::post('/mahasiswa/{nim}/foto',[MahasiswaController::class, 'photomhs'])->name('mahasiswa.photomhs');
-        Route::post('/dosen/{nuptk}/foto', [DosenController::class, 'photodsn'])->name('dosen.foto');
+    Route::post('/mahasiswa/{nim}/foto',[MahasiswaController::class, 'photomhs'])->name('mahasiswa.photomhs');
+    Route::post('/dosen/{nuptk}/foto', [DosenController::class, 'photodsn'])->name('dosen.foto');
+
+    Route::post('/documents', [BerkasMahasiswaController::class, 'store'])->name('documents.store');
+
+
 
 
 

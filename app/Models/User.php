@@ -94,4 +94,9 @@ class User extends Authenticatable
             };
         }
 
+        public function berkas()
+        {
+            return $this->hasOne(BerkasMahasiswa::class);
+        }
+
 }
