@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
@@ -32,7 +33,7 @@ class MahasiswaController extends Controller
             'nomor_telepon'  => 'nullable|max:15',
             'posisi'         => 'nullable|max:50',
             'riwayat_magang' => 'nullable|max:1',
-            'foto'           => 'nullable|max:50',
+            'foto'           => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
             $mahasiswa = Mahasiswa::create($validated);
@@ -129,5 +130,37 @@ class MahasiswaController extends Controller
             ], 500);
         }
     }
-    //
+    
+    public function photomhs(Request $request, $nim)
+{
+    // 1️⃣ Ambil mahasiswa berdasarkan NIM
+    $mahasiswa = Mahasiswa::where('nim', $nim)->firstOrFail();
+
+    // 2️⃣ Validasi
+    $request->validate([
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    // 3️⃣ Hapus foto lama
+    if ($mahasiswa->foto && Storage::disk('public')->exists($mahasiswa->foto)) {
+        Storage::disk('public')->delete($mahasiswa->foto);
+    }
+
+    // 4️⃣ Simpan foto baru
+    $file = $request->file('foto');
+    $filename = $nim . '_' . time() . '.' . $file->getClientOriginalExtension();
+    $path = $file->storeAs('mahasiswa', $filename, 'public');
+
+    // 5️⃣ Update database
+    $mahasiswa->update([
+        'foto' => $path,
+    ]);
+
+    // 6️⃣ Redirect balik (WAJIB untuk form HTML)
+    return back()->with('success', 'Foto profil berhasil diperbarui');
+    dd(storage_path('app/public/' . $path));
+
+}
+
+
 }

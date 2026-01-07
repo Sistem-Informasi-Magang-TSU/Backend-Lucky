@@ -64,7 +64,7 @@
 @endif
 
 
-            <form method="POST" action="{{ route('register.store') }}" class="space-y-4 max-w-md">
+            <form method="POST" action="{{ route('register') }}" class="space-y-4 max-w-md">
             @csrf
 
             <input type="hidden" name="role" id="role-input" value="mahasiswa">

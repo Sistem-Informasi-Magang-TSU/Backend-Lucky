@@ -48,6 +48,8 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+
+
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
@@ -124,29 +126,86 @@
             <div class="flex items-center gap-4">
                 <div class="relative group">
                     @auth
-                    <button class="flex items-center gap-3 bg-white p-2 pr-4 rounded-full shadow-sm border border-gray-100 focus:outline-none transition hover:bg-gray-50">
-                        <img src="{{ asset('images/foto_thomasgtg.png') }}" alt="User" class="w-10 h-10 rounded-full object-cover border-2 border-tsu-teal">
+                    @php
+$user = auth()->user();
+
+$photoUrl = null;
+$displayName = strtoupper($user->role);
+$identity = strtoupper($user->role);
+
+if ($user->role === 'mahasiswa') {
+    if ($user->mahasiswa) {
+        $photoUrl = $user->mahasiswa->foto
+            ? asset('storage/' . $user->mahasiswa->foto)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+
+        $displayName = $user->name;
+        $identity = $user->mahasiswa->nim;
+    }
+}
+elseif ($user->role === 'dosen') {
+    if ($user->dosen) {
+        $photoUrl = $user->dosen->foto
+            ? asset('storage/' . $user->dosen->foto)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+
+        $displayName = $user->name;
+        $identity = $user->dosen->nuptk;
+    }
+}
+elseif ($user->role === 'admin') {
+    $displayName = 'ADMIN';
+    $identity = 'ADMIN';
+}
+@endphp
+
+
+                    <button class="flex items-center gap-3 bg-white p-2 pr-4 rounded-full shadow-sm border border-gray-100 hover:bg-gray-50 transition">
+                        {{-- FOTO / ICON --}}
+                        @if($photoUrl)
+                            <img src="{{ $photoUrl }}"
+                                class="w-10 h-10 rounded-full object-cover border-2 border-tsu-teal">
+                        @else
+                            {{-- ADMIN: TANPA FOTO --}}
+                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center
+                                        border-2 border-gray-300 text-gray-500 font-bold">
+                                A
+                            </div>
+                        @endif
+
+                        {{-- IDENTITAS --}}
                         <div class="leading-none text-left">
                             <p class="font-bold text-sm text-gray-800">
-                                {{ auth()->user()->name }}
+                                {{ $displayName }}
                                 <span class="text-xs ml-1 transition-transform group-hover:rotate-180 inline-block">▼</span>
                             </p>
 
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">
-                                {{ auth()->user()->display_identity }}
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{{ $identity }}
                             </p>
                         </div>
                     </button>
+
                     @endauth
                     
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl py-2 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
-                        <a href="{{ url('/setting') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-tsu-teal font-medium">
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl py-2 border border-gray-100
+                                opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200
+                                transform origin-top-right">
+
+                        <a href="{{ url('/setting') }}"
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-tsu-teal font-medium">
                             <span class="mr-3 text-lg">⚙️</span> Pengaturan
                         </a>
+
                         <div class="my-1 border-t border-gray-100"></div>
-                        <a href="#" id="logoutLink" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium">
-                            <span class="mr-3 text-lg">🚪</span> Keluar
-                        </a>
+
+                        <!-- LOGOUT -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium text-left">
+                                <span class="mr-3 text-lg">🚪</span> Keluar
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

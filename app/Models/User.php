@@ -65,14 +65,33 @@ class User extends Authenticatable
             return $this->hasOne(Mahasiswa::class);
         }
 
-    public function getDisplayIdentityAttribute()
-        {
-            if ($this->role === 'mahasiswa') {
-                return $this->mahasiswa?->nim;
-            }
+    // public function getDisplayIdentityAttribute()
+    //     {
+    //         if ($this->role === 'mahasiswa') {
+    //             return $this->mahasiswa?->nim;
+    //         }
 
-            return ucfirst($this->role);
+    //         return ucfirst($this->role);
+    //     }
+
+        public function getIdentityLabelAttribute()
+        {
+            return match ($this->role) {
+                'dosen' => 'NUPTK',
+                'mahasiswa' => 'NIM',
+                'admin' => 'Role',
+                default => 'Identitas',
+            };
         }
 
+        public function getIdentityValueAttribute()
+        {
+            return match ($this->role) {
+                'dosen' => $this->dosen?->nuptk,
+                'mahasiswa' => $this->mahasiswa?->nim,
+                'admin' => 'ADMIN',
+                default => '-',
+            };
+        }
 
 }

@@ -1,6 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+/**
+ * LEGACY CONTROLLER
+ * Digunakan sebelum implementasi Laravel Breeze
+ * Disimpan untuk dokumentasi & pembelajaran
+ */
+
+
+namespace App\Http\Controllers\legacy;
 
 use App\Models\User;
 use App\Models\Mahasiswa;
@@ -9,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+class LegacyRegisterController extends Controller
 {
     public function show()
     {

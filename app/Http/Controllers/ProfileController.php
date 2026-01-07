@@ -1,31 +1,67 @@
 <?php
 
+/**
+ * LEGACY CONTROLLER
+ * Digunakan sebelum implementasi Laravel Breeze
+ * Disimpan untuk dokumentasi & pembelajaran
+ */
+
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function updatePassword(Request $request)
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Request $request): View
     {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|min:8|confirmed',
+        return view('profile.edit', [
+            'user' => $request->user(),
         ]);
+    }
 
-        $user = auth()->user();
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
 
-        if (! Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors([
-                'current_password' => 'Kata sandi lama tidak sesuai'
-            ]);
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
 
-        $user->update([
-            'password' => Hash::make($request->password)
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
         ]);
 
-        return back()->with('success', 'Kata sandi berhasil diperbarui');
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
     }
 }

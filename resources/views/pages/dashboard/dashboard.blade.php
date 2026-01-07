@@ -9,7 +9,7 @@
 
     <div class="fade-up relative overflow-hidden bg-tsu-teal rounded-[2.5rem] p-10 text-white shadow-2xl shadow-teal-100">
         <div class="relative z-10">
-            <h2 class="text-3xl font-black mb-2">Halo, Thomas gtg! 👋</h2>
+            <h2 class="text-3xl font-black mb-2">Halo, {{ auth()->user()->name }}! 👋</h2>
             <p class="text-teal-50/80 max-w-xl leading-relaxed">
                 Selamat datang di portal magang TSU. Pastikan Anda selalu memantau pengumuman terbaru di bawah ini untuk informasi periode magang dan administrasi.
             </p>
@@ -69,7 +69,7 @@
                 <p class="text-gray-600 text-sm leading-relaxed mb-4">
                     Pendaftaran untuk Program Magang Mandiri batch Januari 2025 kini telah dibuka. Mahasiswa diharapkan segera melengkapi dokumen persyaratan di menu Setting.
                 </p>
-                <a href="{{ route('program') }}" class="inline-block bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-tsu-blue hover:text-white transition">Lihat Daftar Program</a>
+                <a href="{{ route('program.index') }}" class="inline-block bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold hover:bg-tsu-blue hover:text-white transition">Lihat Daftar Program</a>
             </div>
 
             <div class="fade-up delay-400 bg-white border-l-8 border-tsu-orange rounded-3xl p-6 shadow-sm hover:shadow-md transition">

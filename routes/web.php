@@ -1,49 +1,75 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramMagangTampilController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\MahasiswaController;
 
 
-// Landing
+Route::get('/whoami', function () {
+    return response()->json([
+        'authenticated' => auth()->check(),
+        'id'            => auth()->id(),
+        'name'          => auth()->user()?->name,
+        'email'         => auth()->user()?->email,
+        'role'          => auth()->user()?->role,
+    ]);
+})->middleware('auth');
+
+// Landing page (PUBLIC)
 Route::get('/', fn () => view('pages.landing'))->name('landing');
 
-// Register
-Route::get('/register', [RegisterController::class, 'show'])->name('register');
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create'])
+        ->name('register');
 
-// Login
-Route::get('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
+    Route::post('/register', [RegisteredUserController::class, 'store'])
+        ->name('register.store');
 
-// Logout (HARUS auth)
-Route::post('/logout', [LoginController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
-// cek user yang login
-Route::get('/whoami', fn () => auth()->user())
-    ->middleware('auth');
+    // FORGOT PASSWORD
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+});
 
 // Semua halaman yang butuh login
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', fn () => view('pages.dashboard.dashboard'))
-->name('dashboard');
+        ->name('dashboard');
 
-    Route::get('/dashboard/detail/{id}', function ($id) {
-        return view('pages.dashboard.dashboard-detail', compact('id'));})->name('dashboard.detail');
+    Route::get('/dashboard/detail/{id}', fn ($id) =>
+        view('pages.dashboard.dashboard-detail', compact('id'))
+    )->name('dashboard.detail');
 
-    // password change
-    Route::post('/password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
-
-
+    Route::post('/password/update', [ProfileController::class, 'updatePassword'])
+        ->name('password.update');
 
     Route::get('/logbook', fn () => view('pages.logbook.logbook'))->name('logbook');
     Route::get('/setting', fn () => view('pages.setting'))->name('setting');
-    Route::get('/program', [ProgramMagangTampilController::class, 'index'])->name('program.index');
-    Route::get('/program/{id_program}', [ProgramMagangTampilController::class, 'show'])->name('program.show');
+
+    Route::get('/program', [ProgramMagangTampilController::class, 'index'])
+        ->name('program.index');
+
+    Route::get('/program/{id_program}', [ProgramMagangTampilController::class, 'show'])
+        ->name('program.show');
+
     Route::get('/penilaian', fn () => view('pages.penilaian.penilaian'))->name('penilaian');
     Route::get('/pembimbing', fn () => view('pages.pembimbing.pembimbing'))->name('pembimbing');
+
+     Route::put('/password', [PasswordController::class, 'update'])
+        ->name('password.update');
+
+        Route::post('/mahasiswa/{nim}/foto',[MahasiswaController::class, 'photomhs'])->name('mahasiswa.photomhs');
+        Route::post('/dosen/{nuptk}/foto', [DosenController::class, 'photodsn'])->name('dosen.foto');
+
+
+
 });
+
+// AUTH BREEZE
+require __DIR__.'/auth.php';

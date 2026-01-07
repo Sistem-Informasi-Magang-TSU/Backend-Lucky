@@ -56,7 +56,7 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
             </p>
 
-            <form action="{{ route('login.process') }}" method="POST" class="space-y-5 w-full max-w-md">
+            <form action="{{ route('login') }}" method="POST" class="space-y-5 w-full max-w-md">
                     @csrf
 
                     <div>

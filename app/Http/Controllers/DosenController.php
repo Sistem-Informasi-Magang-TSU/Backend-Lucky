@@ -74,4 +74,34 @@ class DosenController extends Controller
             return response()->json(['message' => 'Error delete', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function photodsn(Request $request, $nuptk)
+    {
+        // 1️⃣ Ambil dosen berdasarkan NUPTK
+        $dosen = Dosen::where('nuptk', $nuptk)->firstOrFail();
+
+        // 2️⃣ Validasi file
+        $request->validate([
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // 3️⃣ Hapus foto lama (jika ada)
+        if ($dosen->foto && Storage::disk('public')->exists($dosen->foto)) {
+            Storage::disk('public')->delete($dosen->foto);
+        }
+
+        // 4️⃣ Simpan foto baru ke folder dosen
+        $file = $request->file('foto');
+        $filename = $nuptk . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('dosen', $filename, 'public');
+
+        // 5️⃣ Update database
+        $dosen->update([
+            'foto' => $path,
+        ]);
+
+        // 6️⃣ Kembali ke halaman sebelumnya
+        return back()->with('success', 'Foto dosen berhasil diperbarui');
+    }
+
 }

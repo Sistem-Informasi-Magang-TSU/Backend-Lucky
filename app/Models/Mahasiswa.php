@@ -22,7 +22,6 @@ class Mahasiswa extends Model
         'status',
         'nomor_telepon',
         'posisi',
-        'posisi',
         'riwayat_magang',
         'foto',
     ];

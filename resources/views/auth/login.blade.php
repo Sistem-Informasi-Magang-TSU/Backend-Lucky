@@ -56,7 +56,7 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
             </p>
 
-            <form action="{{ route('login.process') }}" method="POST">
+            <form action="{{ route('login') }}" method="POST">
                     @csrf
                 
                 <div>
