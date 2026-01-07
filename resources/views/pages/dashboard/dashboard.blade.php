@@ -19,11 +19,30 @@
                     <p class="font-bold">Semester Ganjil 2025/2026</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20">
+                    @php
+                        $berkas = auth()->user()->berkas;
+
+                        $terverifikasi = $berkas
+                            && $berkas->cv_file
+                            && $berkas->transkrip_file
+                            && $berkas->krs_file;
+                    @endphp
+
                     <p class="text-[10px] uppercase font-bold text-teal-200">Status Akun</p>
-                    <p class="font-bold flex items-center gap-2">
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Terverifikasi
-                    </p>
+
+                    @if($terverifikasi)
+                        <p class="font-bold flex items-center gap-2 text-green-300">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                            Terverifikasi
+                        </p>
+                    @else
+                        <p class="font-bold flex items-center gap-2 text-red-300">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            Belum Terverifikasi
+                        </p>
+                    @endif
                 </div>
+
             </div>
         </div>
         <div class="absolute right-[-5%] top-[-20%] w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
