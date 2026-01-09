@@ -50,7 +50,7 @@ class PendaftaranController extends Controller
         ], 409);
     }
 
-    if (! $berkas->cv_file || ! $berkas->transkrip_file || ! $berkas->krs_file) {
+    if (! $berkas = $berkas->cv_file || ! $berkas->transkrip_file || ! $berkas->krs_file) {
         return response()->json([
             'success' => false,
             'message' => 'Dokumen belum lengkap'
@@ -61,8 +61,6 @@ class PendaftaranController extends Controller
         'nim' => $mahasiswa->nim,
         'id_program' => $request->program_id,
         'status' => 'menunggu',
-        'cv' => $mahasiswa->cv,
-        'transkrip_nilai' => $mahasiswa->transkrip_nilai,
     ]);
 
     return response()->json([
