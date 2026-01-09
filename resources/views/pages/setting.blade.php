@@ -207,19 +207,17 @@
 
                             </div>
                         </div>
-                        @if($user->berkas?->cv_file)
-                            <div class="mb-3">
-                                <a href="{{ asset('storage/'.$user->berkas->cv_file) }}"
-                                target="_blank"
+                            <div id="cv-preview" class="hidden mt-3">
+                            <button type="button"
+                                onclick="previewPDF('cv_file')"
                                 class="text-xs text-tsu-teal underline font-bold">
-                                    👁 Pratinjau CV
-                                </a>
-                            </div>
-                        @endif
+                                👁 Pratinjau CV
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label for="cv_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200">Pilih PDF</label>
-                        <input type="file" id="cv_file" name="cv_file" class="hidden" accept=".pdf" onchange="updateFileStatus('cv-status', this)"> 
+                        <input type="file" id="cv_file" name="cv_file" class="hidden" accept=".pdf" onchange="updateFileStatus('cv-preview', this)"> 
                     </div>
                 </div>
 
@@ -238,19 +236,17 @@
                                 @endif
                             </div>
                         </div>
-                        @if($user->berkas?->transkrip_file)
-                            <div class="mb-3">
-                                <a href="{{ asset('storage/'.$user->berkas->transkrip_file) }}"
-                                target="_blank"
+                            <div id="transkrip-preview" class="hidden mt-3">
+                            <button type="button"
+                                onclick="previewPDF('transkrip_file')"
                                 class="text-xs text-tsu-teal underline font-bold">
-                                    👁 Pratinjau CV
-                                </a>
-                            </div>
-                        @endif
+                                👁 Pratinjau Transkrip
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label for="transkrip_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200">Pilih PDF</label>
-                        <input type="file" id="transkrip_file" name="transkrip_file" class="hidden" accept=".pdf" onchange="updateFileStatus('transkrip-status', this)">
+                        <input type="file" id="transkrip_file" name="transkrip_file" class="hidden" accept=".pdf" onchange="updateFileStatus('transkrip-preview', this)">
                     </div>
                 </div>
 
@@ -269,19 +265,17 @@
                                 @endif
                             </div>
                         </div>
-                        @if($user->berkas?->krs_file)
-                            <div class="mb-3">
-                                <a href="{{ asset('storage/'.$user->berkas->krs_file) }}"
-                                target="_blank"
+                            <div id="krs-preview" class="hidden mt-3">
+                            <button type="button"
+                                onclick="previewPDF('krs_file')"
                                 class="text-xs text-tsu-teal underline font-bold">
-                                    👁 Pratinjau CV
-                                </a>
-                            </div>
-                        @endif
+                                👁 Pratinjau KRS
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label for="krs_file" class="block w-full text-center bg-gray-100 text-gray-600 py-3 rounded-xl font-bold cursor-pointer hover:bg-gray-200 transition">Pilih PDF</label>
-                        <input type="file" id="krs_file" name="krs_file" class="hidden" accept=".pdf" onchange="updateFileStatus('krs-status', this)">
+                        <input type="file" id="krs_file" name="krs_file" class="hidden" accept=".pdf" onchange="updateFileStatus('krs-preview', this)">
                     </div>
                 </div>
             </div>
@@ -328,6 +322,30 @@
         }
     }
 
+    // function updateFileStatus(id, input) {
+    //     if (input.files.length > 0) {
+    //         const previewId = id.replace('-status', '-preview');
+    //         const previewEl = document.getElementById(previewId);
+
+    //         if (previewEl) {
+    //             previewEl.classList.remove('hidden');
+    //         }
+    //     }
+    // }
+
+    // function previewPDF(inputId) {
+    //     const fileInput = document.getElementById(inputId);
+
+    //     if (!fileInput || !fileInput.files[0]) {
+    //         alert('Pilih file terlebih dahulu');
+    //         return;
+    //     }
+
+    //     const fileURL = URL.createObjectURL(fileInput.files[0]);
+    //     window.open(fileURL, '_blank');
+    // }
+
+
     // Jalankan otomatis saat halaman dimuat jika ada hash #documents di URL
     document.addEventListener('DOMContentLoaded', function() {
         if (window.location.hash === '#documents') {
@@ -340,29 +358,24 @@
         input.type = input.type === 'password' ? 'text' : 'password';
     }
 
-    function updateFileStatus(id, input) {
-        if (input.files.length > 0) {
-            const el = document.getElementById(id);
-            const fileName = input.files[0].name;
-            el.innerText = fileName.length > 15 ? fileName.substring(0, 15) + "..." : fileName;
-            el.classList.remove('text-red-500');
-            el.classList.add('text-tsu-teal');
+    function updateFileStatus(previewId, input) {
+        const tab = document.getElementById('tab-documents');
+        if (tab.classList.contains('hidden')) return;
 
-            const prefix = id.split('-')[0];
-            const containerId = 'preview-container-' + prefix;
-            const container = document.getElementById(containerId);
-            if(container) container.classList.remove('hidden');
+        if (input.files && input.files.length > 0) {
+            const preview = document.getElementById(previewId);
+            if (preview) preview.classList.remove('hidden');
         }
     }
 
     function previewPDF(inputId) {
-        const fileInput = document.getElementById(inputId);
-        if (fileInput && fileInput.files[0]) {
-            const fileURL = URL.createObjectURL(fileInput.files[0]);
-            window.open(fileURL, '_blank');
-        } else {
+        const input = document.getElementById(inputId);
+        if (!input || !input.files[0]) {
             alert('Pilih file terlebih dahulu');
+            return;
         }
+        const url = URL.createObjectURL(input.files[0]);
+        window.open(url, '_blank');
     }
 
     function previewImageProfile(input) {
