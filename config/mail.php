@@ -108,7 +108,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', '2250046.lucky@tsu.ac.id'),
+        'address' => env('MAIL_FROM_ADDRESS', '22500046.lucky@tsu.ac.id'),
         'name' => env('MAIL_FROM_NAME', 'Sistem Informasi Magang - TSU'),
     ],
 

@@ -41,27 +41,30 @@
 
         <h1 class="text-2xl font-bold text-black mb-8">Ubah Kata Sandi</h1>
 
-        <form id="formReset" onsubmit="handleReset(event)" class="w-full max-w-md text-left space-y-5">
-        @csrf  
+        <form method="POST" action="{{ route('password.store') }}" class="w-full max-w-md space-y-5">
+            @csrf
+
+            <input type="hidden" name="token" value="{{ $token }}">
+            <input type="hidden" name="email" value="{{ $email }}">
+
             <div>
-                <label class="block text-black font-semibold text-sm mb-2 ml-1">Kata Sandi Baru</label>
-                <input type="password" placeholder="Masukkan Kata Sandi Baru" 
-                    class="w-full border border-gray-400 px-4 py-3 rounded text-sm placeholder-gray-300 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
+                <label class="block font-semibold">Kata Sandi Baru</label>
+                <input type="password" name="password" required
+                    class="w-full border px-4 py-3 rounded">
             </div>
 
-            <div class="mb-8">
-                <label class="block text-black font-semibold text-sm mb-2 ml-1">Konfirmasi Kata Sandi</label>
-                <input type="password" placeholder="Masukkan Kembali Kata Sandi Baru" 
-                    class="w-full border border-gray-400 px-4 py-3 rounded text-sm placeholder-gray-300 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
+            <div>
+                <label class="block font-semibold">Konfirmasi Kata Sandi</label>
+                <input type="password" name="password_confirmation" required
+                    class="w-full border px-4 py-3 rounded">
             </div>
 
-            <div class="pt-4">
-                <button type="submit" class="w-full bg-tsu-teal text-white font-bold py-3 rounded-lg hover:bg-tsu-teal-dark transition shadow-md text-base">
-                    Ubah Sekarang
-                </button>
-            </div>
-            
+            <button type="submit"
+                class="w-full bg-tsu-teal text-white font-bold py-3 rounded">
+                Ubah Sekarang
+            </button>
         </form>
+
     </div>
 
     <script>

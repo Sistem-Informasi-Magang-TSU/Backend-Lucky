@@ -20,4 +20,11 @@ class BerkasMahasiswa extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function isLengkap()
+    {
+        return $this->cv_file
+            && $this->transkrip_file
+            && $this->krs_file;
+    }
 }

@@ -7,6 +7,9 @@ use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\BerkasMahasiswaController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\PendaftaranController;
 
 
 Route::get('/whoami', function () {
@@ -35,6 +38,13 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
+    // tampilkan form reset
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+
+    // proses reset password
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.reset.store');
 });
 
 // Semua halaman yang butuh login
@@ -48,7 +58,7 @@ Route::middleware('auth')->group(function () {
     )->name('dashboard.detail');
 
     Route::post('/password/update', [ProfileController::class, 'updatePassword'])
-        ->name('password.update');
+        ->name('profile.password.update');
 
     Route::get('/logbook', fn () => view('pages.logbook.logbook'))->name('logbook');
     Route::get('/setting', fn () => view('pages.setting'))->name('setting');
@@ -58,6 +68,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/program/{id_program}', [ProgramMagangTampilController::class, 'show'])
         ->name('program.show');
+    
+    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])
+        ->name('pendaftaran.store');
+
 
     Route::get('/penilaian', fn () => view('pages.penilaian.penilaian'))->name('penilaian');
     Route::get('/pembimbing', fn () => view('pages.pembimbing.pembimbing'))->name('pembimbing');

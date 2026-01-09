@@ -40,4 +40,13 @@ class BerkasMahasiswaController extends Controller
 
     return back()->with('success', 'Dokumen berhasil disimpan');
 }
+    
+public function index()
+{
+    $berkas = BerkasMahasiswa::where('user_id', auth()->id())->first();
+
+    $berkasLengkap = $berkas && $berkas->isLengkap();
+
+    return view('pages.setting', compact('berkas', 'berkasLengkap'));
+}
 }

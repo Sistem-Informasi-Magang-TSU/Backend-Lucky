@@ -112,7 +112,7 @@
     <h3 class="fade-up text-2xl font-black text-gray-800 mb-8">Ubah Kata Sandi</h3>
 
     <form 
-        action="{{ route('password.update') }}" 
+        action="{{ route('profile.password.update') }}" 
         method="POST"
         class="w-full max-w-md text-left space-y-5"
     >

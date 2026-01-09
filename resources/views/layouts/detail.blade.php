@@ -44,13 +44,47 @@
             </div>
 
             <div class="relative">
+                 @auth
+                    @php
+                    $user = auth()->user();
+
+                    $photoUrl = null;
+                    $displayName = strtoupper($user->role);
+                    $identity = strtoupper($user->role);
+
+                    if ($user->role === 'mahasiswa') {
+                        if ($user->mahasiswa) {
+                            $photoUrl = $user->mahasiswa->foto
+                                ? asset('storage/' . $user->mahasiswa->foto)
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+
+                            $displayName = $user->name;
+                            $identity = $user->mahasiswa->nim;
+                        }
+                    }
+                    elseif ($user->role === 'dosen') {
+                        if ($user->dosen) {
+                            $photoUrl = $user->dosen->foto
+                                ? asset('storage/' . $user->dosen->foto)
+                                : 'https://ui-avatars.com/api/?name=' . urlencode($user->name);
+
+                            $displayName = $user->name;
+                            $identity = $user->dosen->nuptk;
+                        }
+                    }
+                    elseif ($user->role === 'admin') {
+                        $displayName = 'ADMIN';
+                        $identity = 'ADMIN';
+                    }
+                    @endphp
                 <button onclick="toggleDropdown()" class="flex items-center gap-3 hover:bg-white/10 p-2 rounded-xl transition">
-                    <img src="/images/foto_thomasgtg.png" alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-white/50 shadow-sm">
+                    <img src="{{ $photoUrl }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-white/50 shadow-sm">
                     <div class="text-left hidden sm:block leading-tight">
-                        <p class="font-bold text-sm flex items-center gap-1">Thomas gtg <span class="text-[10px] opacity-70">▼</span></p>
-                        <p class="text-[11px] text-gray-200 font-light">22430035</p>
+                        <p class="font-bold text-sm flex items-center gap-1">{{ $displayName }}<span class="text-[10px] opacity-70">▼</span></p>
+                        <p class="text-[11px] text-gray-200 font-light">{{ $identity }}</p>
                     </div>
                 </button>
+                @endauth
 
                 <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-[100]">
                     <a href="{{ url('/setting') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition">

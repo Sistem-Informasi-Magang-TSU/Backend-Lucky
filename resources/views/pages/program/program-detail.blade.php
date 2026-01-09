@@ -28,6 +28,7 @@
         </div>
 
         <button id="btnDaftar" onclick="prosesPendaftaran()" class="bg-tsu-teal hover:bg-tsu-teal-dark text-white font-bold py-3 px-8 rounded-full flex items-center gap-2 shadow-lg transition transform hover:-translate-y-0.5">
+            
             <svg id="iconDaftar" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
@@ -97,8 +98,8 @@
     </div>
 
     <script>
-        let hasDocuments = false; 
-        let isRegistered = false;
+        let hasDocuments = @json($hasDocuments);
+        let isRegistered = @json($isRegistered);
 
         function prosesPendaftaran() {
             if(isRegistered) {
@@ -114,7 +115,7 @@
             if (!hasDocuments) {
                 Swal.fire({
                     title: 'Dokumen Belum Lengkap!',
-                    text: 'Silakan upload CV dan Transkrip Nilai di menu Setting terlebih dahulu.',
+                    text: 'Silakan upload dokumen di menu Setting terlebih dahulu.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#086375',
@@ -137,13 +138,42 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        simulasiSuksesDaftar();
+                        fetch("{{ route('pendaftaran.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                program_id: {{ $program->program_id }}
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                suksesDaftarUI();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: data.message || 'Gagal mendaftar'
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: err.message || 'Terjadi kesalahan'
+                            });
+                        });
+
                     }
                 });
             }
         }
 
-        function simulasiSuksesDaftar() {
+        function suksesDaftarUI() {
             isRegistered = true;
             
             Swal.fire({
