@@ -10,49 +10,42 @@ class LogbookController extends Controller
 {
     public function index()
     {
-        $logbook = LogBook::all();
+        $user = auth()->user();
 
-        if ($logbook->isEmpty()) {
-            return response()->json([
-                'message' => 'Tidak ada data logbook ditemukan.'
-            ], 404);
-        }
+        $logbooks = LogBook::where('nim', $user->mahasiswa->nim)
+            ->orderBy('tanggal_mulai', 'desc')
+            ->get();
 
-        return response()->json($logbook, 200);
+        return view('pages.logbook.logbook', compact('logbooks'));
     }
 
-    public function store(Request $request)
+     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'nim'             => 'required|exists:mahasiswa,nim',
-                'id_program'      => 'required|exists:program_magang,id_program',
-                'tanggal'         => 'required|date',
-                'aktivitas'       => 'required',
-                'lampiran'        => 'nullable|string',
-                'jenis_logbook'   => 'required|in:harian,mingguan,bulanan',
-                'status_validasi' => 'required|in:belum divalidasi,divalidasi'
-            ]);
+        $user = auth()->user();
 
-            $logbook = LogBook::create($validated);
+        $request->validate([
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+            'nama_kegiatan'   => 'required|string',
+            'uraian_kegiatan' => 'required|string',
+            'jenis_logbook'   => 'required|in:Individu,Kelompok',
+        ]);
 
-            if ($logbook) {
-                return response()->json([
-                    'message' => 'LogBook berhasil ditambahkan',
-                    'data' => $logbook
-                ], 201);
-            }
+        LogBook::create([
+            'nim'             => $user->mahasiswa->nim,
+            'id_program'      => $user->mahasiswa->id_program,
+            'tanggal_mulai'   => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+            'nama_kegiatan'   => $request->nama_kegiatan,
+            'uraian_kegiatan' => $request->uraian_kegiatan,
+            'jenis_logbook'   => $request->jenis_logbook,
+            'status_validasi' => 'pending',
+        ]);
 
-            return response()->json([
-                'message' => 'Gagal menambahkan logbook.'
-            ], 500);
-
-        } catch (QueryException $e) {
-            return response()->json([
-                'message' => 'Terjadi kesalahan pada database.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Logbook berhasil disimpan'
+        ]);
     }
 
     public function show($nim)

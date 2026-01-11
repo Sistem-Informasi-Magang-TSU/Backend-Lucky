@@ -10,17 +10,24 @@ class LogBook extends Model
     protected $primaryKey = 'id_logbook';
 
     protected $fillable = [
-        'nim', 'id_program', 'tanggal', 'aktivitas',
-        'lampiran', 'jenis_logbook', 'status_validasi'
+        'nim',
+        'id_program',
+        'tanggal_mulai',
+        'tanggal_selesai',
+        'nama_kegiatan',
+        'uraian_kegiatan',
+        'jenis_logbook',
+        'status_validasi',
     ];
 
     public function mahasiswa()
     {
-        return $this->belongsTo(Mahasiswa::class, 'nim');
+        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 
     public function programMagang()
     {
-        return $this->belongsTo(ProgramMagang::class, 'id_program');
+        return $this->belongsTo(ProgramMagang::class, 'id_program', 'id_program');
     }
 }
+

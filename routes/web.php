@@ -9,6 +9,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\BerkasMahasiswaController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\PendaftaranController;
 
 
@@ -60,7 +61,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/password/update', [ProfileController::class, 'updatePassword'])
         ->name('profile.password.update');
 
-    Route::get('/logbook', fn () => view('pages.logbook.logbook'))->name('logbook');
+    Route::get('/logbookview', fn () => view('pages.logbook.logbook'))->name('logbook');
+    Route::get('/logbook', [LogbookController::class, 'index'])->name('logbook.index');
+    Route::post('/logbook', [LogbookController::class, 'store'])->name('logbook.store');
     Route::get('/setting', fn () => view('pages.setting'))->name('setting');
 
     Route::get('/program', [ProgramMagangTampilController::class, 'index'])

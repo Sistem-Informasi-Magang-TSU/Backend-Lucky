@@ -74,7 +74,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
         </div>
-        <div classname="flex">
+        <div class="flex">
             <h3 class="font-bold text-black text-lg">Deskripsi Program</h3>
             <p class="text-sm text-black leading-relaxed">
                         {{ $program->deskripsi_silabus ?? 'Belum ada deskripsi.' }}
@@ -145,7 +145,7 @@ function prosesPendaftaran() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                program_id: {{ $program->program_id }}
+                id_program: {{ $program->id_program }}
             })
         })
         .then(res => res.json())
@@ -154,7 +154,18 @@ function prosesPendaftaran() {
                 Swal.fire('Gagal', res.message, 'error');
                 return;
             }
-            suksesDaftarUI();
+            Swal.fire({
+                title: 'Berhasil',
+                text: 'Pendaftaran berhasil!',
+                icon: 'success'
+            }).then(() => {
+                window.location.href = "{{ route('dashboard') }}";
+            });
+        })
+        .then(async res => {
+            const data = await res.json();
+            console.log(res.status, data);
+            return data;
         })
         .catch(() => {
             Swal.fire('Error', 'Server error', 'error');
@@ -177,104 +188,5 @@ function suksesDaftarUI() {
 </script>
 
 
-    {{-- <script>
-        let hasDocuments = @json($hasDocuments);
-        let isRegistered = @json($isRegistered);
-
-        function prosesPendaftaran() {
-            if(isRegistered) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Anda Sudah Terdaftar',
-                    text: 'Anda tidak dapat mendaftar ulang pada program ini.',
-                    confirmButtonColor: '#086375'
-                });
-                return;
-            }
-
-            if (!hasDocuments) {
-                Swal.fire({
-                    title: 'Dokumen Belum Lengkap!',
-                    text: 'Silakan upload dokumen di menu Setting terlebih dahulu.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#086375',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ke Pengaturan Sekarang'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "{{ url('/setting') }}";
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Konfirmasi Pendaftaran',
-                    text: "Setelah mendaftar, Anda tidak dapat membatalkan pendaftaran ini. Yakin ingin melanjutkan?",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#086375',
-                    cancelButtonColor: '#aaa',
-                    confirmButtonText: 'Ya, Daftar Sekarang',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch("{{ route('pendaftaran.store') }}", {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                program_id: {{ $program->program_id }}
-                            })
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                suksesDaftarUI();
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Gagal',
-                                    text: data.message || 'Gagal mendaftar'
-                                });
-                            }
-                        })
-                        .catch(err => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: err.message || 'Terjadi kesalahan'
-                            });
-                        });
-
-                    }
-                });
-            }
-        }
-
-        function suksesDaftarUI() {
-            isRegistered = true;
-            
-            Swal.fire({
-                title: 'Berhasil Terdaftar!',
-                text: 'Lamaran Anda telah terkirim ke tim Program, Anda akan dihubungi lebih lanjut jika lolos.',
-                icon: 'success',
-                confirmButtonColor: '#086375'
-            });
-
-            const btn = document.getElementById('btnDaftar');
-            const icon = document.getElementById('iconDaftar');
-            const text = document.getElementById('textDaftar');
-
-            btn.classList.remove('bg-tsu-teal', 'hover:bg-tsu-teal-dark');
-            btn.classList.add('bg-gray-400', 'cursor-not-allowed');
-            btn.disabled = true;
-            
-            icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
-            icon.classList.remove('rotate-45');
-            
-            text.innerText = 'Sudah Mendaftar';
-        }
-    </script> --}}
+    
 @endsection
