@@ -96,7 +96,7 @@ class User extends Authenticatable
 
         public function berkas()
         {
-            return $this->hasOne(BerkasMahasiswa::class);
+            return $this->hasOne(BerkasMahasiswa::class,'user_id', 'id');
         }
 
 }
