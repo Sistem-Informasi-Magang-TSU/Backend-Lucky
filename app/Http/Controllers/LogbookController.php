@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\logbook;
+use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
@@ -19,26 +20,37 @@ class LogbookController extends Controller
         return view('pages.logbook.logbook', compact('logbooks'));
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $user = auth()->user();
 
         $request->validate([
-            'tanggal_mulai'   => 'required|date',
+            'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'nama_kegiatan'   => 'required|string',
+            'nama_kegiatan' => 'required|string',
             'uraian_kegiatan' => 'required|string',
-            'jenis_logbook'   => 'required|in:Individu,Kelompok',
+            'jenis_logbook' => 'required|in:individu,kelompok',
         ]);
 
+        $pendaftaran = Pendaftaran::where('nim', $user->mahasiswa->nim)
+            ->where('status', 'diterima')
+            ->first();
+
+        if (!$pendaftaran) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda belum terdaftar di program magang manapun atau status belum diterima.'
+            ], 422);
+        }
+
         LogBook::create([
-            'nim'             => $user->mahasiswa->nim,
-            'id_program'      => $user->mahasiswa->id_program,
-            'tanggal_mulai'   => $request->tanggal_mulai,
+            'nim' => $user->mahasiswa->nim,
+            'id_program' => $pendaftaran->id_program,
+            'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
-            'nama_kegiatan'   => $request->nama_kegiatan,
+            'nama_kegiatan' => $request->nama_kegiatan,
             'uraian_kegiatan' => $request->uraian_kegiatan,
-            'jenis_logbook'   => $request->jenis_logbook,
+            'jenis_logbook' => $request->jenis_logbook,
             'status_validasi' => 'pending',
         ]);
 

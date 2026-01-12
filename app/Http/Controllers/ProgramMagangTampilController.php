@@ -27,12 +27,12 @@ class ProgramMagangTampilController extends Controller
 
             $hasDocuments = $berkas && $berkas->isLengkap();
 
-            $isRegistered = Pendaftaran::where('nim', $user->nim)
+            $isRegistered = Pendaftaran::where('nim', $user->mahasiswa->nim)
                 ->where('id_program', $program->id_program)
                 ->exists();
 
         }
-        return view('pages.program.program-detail', compact('program','hasDocuments','isRegistered'));
+        return view('pages.program.program-detail', compact('program', 'hasDocuments', 'isRegistered'));
     }
-    
+
 }

@@ -16,15 +16,15 @@ use App\Http\Controllers\PendaftaranController;
 Route::get('/whoami', function () {
     return response()->json([
         'authenticated' => auth()->check(),
-        'id'            => auth()->id(),
-        'name'          => auth()->user()?->name,
-        'email'         => auth()->user()?->email,
-        'role'          => auth()->user()?->role,
+        'id' => auth()->id(),
+        'name' => auth()->user()?->name,
+        'email' => auth()->user()?->email,
+        'role' => auth()->user()?->role,
     ]);
 })->middleware('auth');
 
 // Landing page (PUBLIC)
-Route::get('/', fn () => view('pages.landing'))->name('landing');
+Route::get('/', fn() => view('pages.landing'))->name('landing');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -51,38 +51,40 @@ Route::middleware('guest')->group(function () {
 // Semua halaman yang butuh login
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', fn () => view('pages.dashboard.dashboard'))
+    Route::get('/dashboard', fn() => view('pages.dashboard.dashboard'))
         ->name('dashboard');
 
-    Route::get('/dashboard/detail/{id}', fn ($id) =>
+    Route::get(
+        '/dashboard/detail/{id}',
+        fn($id) =>
         view('pages.dashboard.dashboard-detail', compact('id'))
     )->name('dashboard.detail');
 
     Route::post('/password/update', [ProfileController::class, 'updatePassword'])
         ->name('profile.password.update');
 
-    Route::get('/logbookview', fn () => view('pages.logbook.logbook'))->name('logbook');
+    Route::get('/logbookview', [LogbookController::class, 'index'])->name('logbook');
     Route::get('/logbook', [LogbookController::class, 'index'])->name('logbook.index');
     Route::post('/logbook', [LogbookController::class, 'store'])->name('logbook.store');
-    Route::get('/setting', fn () => view('pages.setting'))->name('setting');
+    Route::get('/setting', fn() => view('pages.setting'))->name('setting');
 
     Route::get('/program', [ProgramMagangTampilController::class, 'index'])
         ->name('program.index');
 
     Route::get('/program/{id_program}', [ProgramMagangTampilController::class, 'show'])
         ->name('program.show');
-    
+
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])
         ->name('pendaftaran.store');
 
 
-    Route::get('/penilaian', fn () => view('pages.penilaian.penilaian'))->name('penilaian');
-    Route::get('/pembimbing', fn () => view('pages.pembimbing.pembimbing'))->name('pembimbing');
+    Route::get('/penilaian', fn() => view('pages.penilaian.penilaian'))->name('penilaian');
+    Route::get('/pembimbing', fn() => view('pages.pembimbing.pembimbing'))->name('pembimbing');
 
-     Route::put('/password', [PasswordController::class, 'update'])
+    Route::put('/password', [PasswordController::class, 'update'])
         ->name('password.update');
 
-    Route::post('/mahasiswa/{nim}/foto',[MahasiswaController::class, 'photomhs'])->name('mahasiswa.photomhs');
+    Route::post('/mahasiswa/{nim}/foto', [MahasiswaController::class, 'photomhs'])->name('mahasiswa.photomhs');
     Route::post('/dosen/{nuptk}/foto', [DosenController::class, 'photodsn'])->name('dosen.foto');
 
     Route::post('/documents', [BerkasMahasiswaController::class, 'store'])->name('documents.store');
@@ -94,4 +96,4 @@ Route::middleware('auth')->group(function () {
 });
 
 // AUTH BREEZE
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

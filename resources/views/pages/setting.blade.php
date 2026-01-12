@@ -197,10 +197,14 @@
                             <div class="bg-red-50 text-red-500 p-4 rounded-2xl group-hover:bg-red-500 group-hover:text-white transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
                             </div>
+                            </div>
                             <div>
                                 <h4 class="font-bold text-gray-800">File CV</h4>
                                 @if($user->berkas?->cv_file)
-                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                    <div class="flex flex-col">
+                                        <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                        <a href="{{ asset('storage/' . $user->berkas->cv_file) }}" target="_blank" class="text-xs text-blue-600 underline hover:text-blue-800">Lihat File</a>
+                                    </div>
                                 @else
                                     <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
                                 @endif
@@ -230,7 +234,10 @@
                             <div>
                                 <h4 class="font-bold text-gray-800">Transkrip Nilai</h4>
                                 @if($user->berkas?->transkrip_file)
-                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                    <div class="flex flex-col">
+                                        <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                        <a href="{{ asset('storage/' . $user->berkas->transkrip_file) }}" target="_blank" class="text-xs text-blue-600 underline hover:text-blue-800">Lihat File</a>
+                                    </div>
                                 @else
                                     <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
                                 @endif
@@ -259,7 +266,10 @@
                             <div>
                                 <h4 class="font-bold text-gray-800">KRS Terbaru</h4>
                                 @if($user->berkas?->krs_file)
-                                    <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                    <div class="flex flex-col">
+                                        <p class="text-xs text-green-600 font-bold">Sudah Diupload</p>
+                                        <a href="{{ asset('storage/' . $user->berkas->krs_file) }}" target="_blank" class="text-xs text-blue-600 underline hover:text-blue-800">Lihat File</a>
+                                    </div>
                                 @else
                                     <p class="text-xs text-red-500 font-bold">Belum Ada File</p>
                                 @endif

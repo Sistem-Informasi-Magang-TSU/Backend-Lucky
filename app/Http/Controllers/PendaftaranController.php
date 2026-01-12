@@ -8,6 +8,7 @@ class PendaftaranController extends Controller
 {
     public function store(Request $request)
     {
+
         $user = auth()->user();
 
         if (!$user || $user->role !== 'mahasiswa') {
@@ -41,7 +42,7 @@ class PendaftaranController extends Controller
             ], 409);
         }
 
-        $berkas = $user->mahasiswa->berkas ?? null;
+        $berkas = $user->berkas ?? null;
 
         if (
             !$berkas ||
@@ -66,4 +67,6 @@ class PendaftaranController extends Controller
             'data' => $pendaftaran
         ]);
     }
+
+
 }
