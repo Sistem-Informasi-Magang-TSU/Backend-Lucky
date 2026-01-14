@@ -25,7 +25,7 @@ class DosenController extends Controller
                 'nama' => 'required|max:100',
                 'prodi' => 'required|max:50',
                 'kontak' => 'nullable|max:20'
-        ]);
+            ]);
 
             $data = Dosen::create($validated);
             return response()->json(['message' => 'Dosen berhasil ditambahkan', 'data' => $data], 201);
@@ -102,6 +102,21 @@ class DosenController extends Controller
 
         // 6️⃣ Kembali ke halaman sebelumnya
         return back()->with('success', 'Foto dosen berhasil diperbarui');
+    }
+
+    public function updateKontak(Request $request, $nuptk)
+    {
+        $dosen = Dosen::where('nuptk', $nuptk)->firstOrFail();
+
+        $request->validate([
+            'kontak' => 'required|numeric|digits_between:10,15',
+        ]);
+
+        $dosen->update([
+            'kontak' => $request->kontak,
+        ]);
+
+        return back()->with('success', 'Nomor WhatsApp berhasil diperbarui');
     }
 
 }

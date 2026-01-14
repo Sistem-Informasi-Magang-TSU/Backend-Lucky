@@ -11,7 +11,12 @@ class Dosen extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['nuptk', 'kontak','foto_dosen'];
+    protected $fillable = ['user_id', 'nuptk', 'kontak', 'foto_dosen'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function pembimbing()
     {

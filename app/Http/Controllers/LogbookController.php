@@ -17,7 +17,7 @@ class LogbookController extends Controller
             ->orderBy('tanggal_mulai', 'desc')
             ->get();
 
-        return view('pages.logbook.logbook', compact('logbooks'));
+        return view('mahasiswa.logbook.logbook', compact('logbooks'));
     }
 
     public function store(Request $request)

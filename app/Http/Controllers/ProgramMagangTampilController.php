@@ -11,7 +11,7 @@ class ProgramMagangTampilController extends Controller
     public function index()
     {
         $programs = ProgramMagang::with('mitra')->get();
-        return view('pages.program.program', compact('programs'));
+        return view('mahasiswa.program.program', compact('programs'));
     }
 
     public function show($id_program)
@@ -32,7 +32,7 @@ class ProgramMagangTampilController extends Controller
                 ->exists();
 
         }
-        return view('pages.program.program-detail', compact('program', 'hasDocuments', 'isRegistered'));
+        return view('mahasiswa.program.program-detail', compact('program', 'hasDocuments', 'isRegistered'));
     }
 
 }
