@@ -120,7 +120,7 @@
 
             $isMahasiswa = $role === 'mahasiswa';
             $isDosen = $role === 'dosen';
-            $isAdmin = $role === 'admin';
+            $isAdmin = $role === 'admin'    ;
 
             $activeClass = 'bg-[#074755] text-white shadow-md';
             $inactiveClass = 'bg-white text-black hover:bg-gray-100 transition shadow-sm';

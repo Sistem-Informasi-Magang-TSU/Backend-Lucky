@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Data Mahasiswa')
+
 @section('header_title', 'Database Mahasiswa')
 
 @section('content')
@@ -10,10 +11,35 @@
             <h3 class="text-xl font-bold text-gray-800">Manajemen Data Mahasiswa</h3>
             <p class="text-sm text-gray-500">Total <span id="student-count" class="font-bold text-tsu-teal">0</span> mahasiswa terdaftar</p>
         </div>
-        <div class="relative w-full md:w-72">
-            <input type="text" id="searchInput" onkeyup="searchMahasiswa()" placeholder="Cari Nama atau NIM..." 
-                   class="w-full bg-white border-none rounded-2xl py-3 px-11 shadow-sm focus:ring-2 focus:ring-tsu-teal transition">
-            <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
+        
+        <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            @php
+                $adminRole = request()->get('role', 'fakultas');
+            @endphp
+
+            @if($adminRole == 'universitas')
+            <select id="filterFakultas" class="bg-white border-none rounded-2xl py-3 px-4 shadow-sm focus:ring-2 focus:ring-tsu-teal text-sm font-medium text-gray-600 outline-none">
+                <option value="">Semua Fakultas</option>
+                <option value="FTI">Fakultas Teknologi Informasi</option>
+                <option value="FEB">Fakultas Ekonomi & Bisnis</option>
+                <option value="FK">Fakultas Kedokteran</option>
+            </select>
+            @endif
+
+            @if($adminRole == 'universitas' || $adminRole == 'fakultas')
+            <select id="filterProdi" class="bg-white border-none rounded-2xl py-3 px-4 shadow-sm focus:ring-2 focus:ring-tsu-teal text-sm font-medium text-gray-600 outline-none">
+                <option value="">Semua Program Studi</option>
+                <option value="Informatika">Informatika</option>
+                <option value="Sistem Informasi">Sistem Informasi</option>
+                <option value="Teknik Komputer">Teknik Komputer</option>
+            </select>
+            @endif
+
+            <div class="relative w-full md:w-64">
+                <input type="text" id="searchInput" onkeyup="searchMahasiswa()" placeholder="Cari Nama atau NIM..." 
+                       class="w-full bg-white border-none rounded-2xl py-3 px-11 shadow-sm focus:ring-2 focus:ring-tsu-teal transition text-sm">
+                <span class="absolute left-4 top-3.5 text-gray-400">🔍</span>
+            </div>
         </div>
     </div>
 
@@ -24,6 +50,7 @@
                     <tr class="bg-gray-50/50">
                         <th class="px-6 py-5 text-xs font-bold text-gray-400 uppercase">Mahasiswa</th>
                         <th class="px-6 py-5 text-xs font-bold text-gray-400 uppercase">Kontak & Email</th>
+                        <th class="px-6 py-5 text-xs font-bold text-gray-400 uppercase">Prodi</th>
                         <th class="px-6 py-5 text-xs font-bold text-gray-400 uppercase">Program Saat Ini</th>
                         <th class="px-6 py-5 text-xs font-bold text-gray-400 uppercase text-center">Berkas</th>
                     </tr>
@@ -48,6 +75,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-xs font-bold text-gray-700">{{ $mhs->email }}</td>
+                        <td class="px-6 py-4 text-xs font-bold text-gray-700">{{ $mhsData ? $mhsData->prodi : '-' }}</td>
                         <td class="px-6 py-4">
                             @if($program)
                                 <span class="text-xs font-medium text-gray-600">{{ $program->posisi }} - {{ $program->mitra->nama_mitra }}</span>
