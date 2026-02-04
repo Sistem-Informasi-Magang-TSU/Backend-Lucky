@@ -37,12 +37,11 @@ class RegisteredUserController extends Controller
                 Password::min(10)
                     ->mixedCase()
                     ->numbers()
-                    ->symbols(),
             ],
 
             'role' => ['required', 'in:mahasiswa,dosen'],
 
-            'nim'   => ['required_if:role,mahasiswa', 'nullable', 'unique:mahasiswa,nim'],
+            'nim' => ['required_if:role,mahasiswa', 'nullable', 'unique:mahasiswa,nim'],
             'prodi' => ['required_if:role,mahasiswa'],
 
             'nuptk' => ['required_if:role,dosen', 'nullable', 'unique:dosen,nuptk'],
@@ -51,10 +50,10 @@ class RegisteredUserController extends Controller
         DB::transaction(function () use ($request) {
 
             $user = User::create([
-                'name'     => $request->name,
-                'email'    => $request->email,
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role'     => $request->role,
+                'role' => $request->role,
             ]);
 
             event(new Registered($user));
@@ -62,15 +61,15 @@ class RegisteredUserController extends Controller
             if ($request->role === 'mahasiswa') {
                 Mahasiswa::create([
                     'user_id' => $user->id,
-                    'nim'     => $request->nim,
-                    'prodi'   => $request->prodi,
+                    'nim' => $request->nim,
+                    'prodi' => $request->prodi,
                 ]);
             }
 
             if ($request->role === 'dosen') {
                 Dosen::create([
                     'user_id' => $user->id,
-                    'nuptk'   => $request->nuptk,
+                    'nuptk' => $request->nuptk,
                 ]);
             }
         });
