@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - TSU</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -15,236 +17,302 @@
                     colors: {
                         'tsu-teal': '#086375',
                         'tsu-teal-dark': '#064e5c',
-                        'tsu-bg-right': '#4EA7B2',
-                        'tsu-blue-link': '#2563eb',
-                        'tsu-border': '#393939'
+                        'tsu-light': '#f0f9fa',
                     },
-                    fontFamily: {
-                        'sans': ['Poppins', 'sans-serif'],
+                    fontFamily: { 'sans': ['Poppins', 'sans-serif'] },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-gradient-to-br from-[#4c9ca8] to-[#2c6e7a] font-sans min-h-screen flex items-center justify-center p-0 m-0 overflow-hidden">
+    <style>
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
 
-    <div class="w-full h-screen flex flex-row">
-        
-        <div class="w-full lg:w-[55%] bg-white h-full rounded-r-[50px] lg:rounded-r-[60px] flex flex-col justify-center px-8 sm:px-12 md:px-20 lg:px-24 py-8 overflow-y-auto relative z-20 shadow-2xl">
-            
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-25 h-20 flex-shrink-0">
-                    <img src="/images/logo_tsu.svg" class="h-30 mb-4" alt="">
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-xs text-gray-800 leading-tight mt-1">Sistem Informasi Magang<br><span class="font-bold">UNIVERSITAS TIGA SERANGKAI</span></span>
-                </div>
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #086375;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        input {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-[#4c9ca8] to-[#2c6e7a] font-sans min-h-screen flex items-center justify-center p-0 m-0 overflow-hidden">
+
+    <div class="flex w-full h-screen bg-white shadow-2xl overflow-hidden">
+
+        <div
+            class="w-full lg:w-[55%] h-full flex flex-col px-8 sm:px-16 lg:px-24 py-10 overflow-y-auto custom-scroll bg-white rounded-r-[40px] lg:rounded-r-[80px] z-20 shadow-2xl">
+
+            <div class="flex items-center gap-4 mb-10 animate-fade-in-up">
+                <img src="/images/logo_tsu.svg" class="h-16 w-auto" alt="Logo TSU">
+                <div class="h-10 w-[2px] bg-gray-200"></div>
+                <span class="text-[11px] font-medium text-gray-500 uppercase tracking-wider leading-tight">
+                    Sistem Informasi Magang<br>
+                    <b class="text-gray-800 text-xs tracking-normal">Universitas Tiga Serangkai</b>
+                </span>
             </div>
 
-            <div class="flex w-full mb-6 border border-tsu-border rounded-full p-[1px] max-w-md">
-                <button type="button" id="tab-mahasiswa" 
-                    class="tab-btn w-1/2 py-2 rounded-l-full bg-tsu-teal text-white font-semibold text-center text-sm sm:text-base transition">
-                    Mahasiswa
-                </button>
-                <button type="button" id="tab-dosen" 
-                    class="tab-btn w-1/2 py-2 rounded-r-full bg-white text-black font-semibold text-center text-sm sm:text-base hover:bg-gray-50 transition">
-                    Dosen Pembimbing
-                </button>
+            <div class="animate-fade-in-up delay-100 opacity-0" style="animation-fill-mode: forwards;">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Buat Akun Baru</h2>
+                <p class="text-gray-500 text-sm mb-8">Bergabunglah untuk mulai mengelola kegiatan magang Anda.</p>
             </div>
 
             @if ($errors->any())
-    <div class="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm">
-        <ul class="list-disc pl-5">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                <div
+                    class="mb-4 p-3 rounded bg-red-100 border border-red-400 text-red-700 text-sm animate-fade-in-up delay-100">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-
-            <form method="POST" action="{{ route('register') }}" class="space-y-4 max-w-md">
-            @csrf
-
-            <input type="hidden" name="role" id="role-input" value="mahasiswa">
-                
-                <div>
-                    <label class="block text-black font-medium text-sm mb-1">Nama Lengkap</label>
-                    <input type="text" name="name" id="input-nama" placeholder="Masukkan Nama Lengkap" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
+            <div x-data="{ role: '{{ old('role', 'mahasiswa') }}' }"
+                class="w-full max-w-md animate-fade-in-up delay-200 opacity-0" style="animation-fill-mode: forwards;">
+                <div class="inline-flex p-1.5 bg-gray-100 rounded-2xl mb-8 w-full">
+                    <button @click="role = 'mahasiswa'"
+                        :class="role === 'mahasiswa' ? 'bg-tsu-teal text-white shadow-md' : 'text-gray-500 hover:text-gray-700'"
+                        class="flex-1 py-2.5 text-sm font-bold rounded-xl transition-all duration-300">
+                        Mahasiswa
+                    </button>
+                    <button @click="role = 'dosen'"
+                        :class="role === 'dosen' ? 'bg-tsu-teal text-white shadow-md' : 'text-gray-500 hover:text-gray-700'"
+                        class="flex-1 py-2.5 text-sm font-bold rounded-xl transition-all duration-300">
+                        Dosen Pembimbing
+                    </button>
                 </div>
 
-                 <div id="field-prodi" class="mt-4">
-                <label for="prodi" class="block text-sm font-medium text-gray-700">
-                    Program Studi
-                </label>
+                <form method="POST" action="{{ route('register') }}" class="space-y-5 pb-10" x-data="{ 
+                    password: '', 
+                    confirm_password: '', 
+                    showPass: false,
+                    showConfirm: false,
+                    prodi: '{{ old('prodi') }}',
+                    dropdownOpen: false,
+                    prodiLabel: ''
+                }" x-init="
+                    const prodiMap = {
+                        'informatika': 'Informatika',
+                        'sistem_informasi': 'Sistem Informasi',
+                        'teknik_komputer': 'Teknik Komputer',
+                        'rekayasa_perangkat_lunak': 'Rekayasa Perangkat Lunak'
+                    };
+                    prodiLabel = prodiMap[prodi] || '';
+                ">
+                    @csrf
+                    <input type="hidden" name="role" :value="role">
 
-                <select name="prodi" id="prodi" required class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition"
-                >
-                    <option value="">-- Pilih Program Studi --</option>
-                    <option value="informatika">Informatika</option>
-                    <option value="sistem_informasi">Sistem Informasi</option>
-                    <option value="teknik_komputer">Teknik Komputer</option>
-                    <option value="rekayasa_perangkat_lunak">Rekayasa Perangkat Lunak</option>
-                </select>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1">Nama
+                            Lengkap</label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            :placeholder="role === 'mahasiswa' ? 'Contoh: Gibran Rakabuming' : 'Contoh: Prabowo Subianto'"
+                            required
+                            class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1"
+                                x-text="role === 'mahasiswa' ? 'NIM' : 'NUPTK'"></label>
+
+                            <input x-show="role === 'mahasiswa'" type="text" name="nim" value="{{ old('nim') }}"
+                                placeholder="2243XXXX" :required="role === 'mahasiswa'"
+                                class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none">
+
+                            <input x-show="role === 'dosen'" type="text" name="nuptk" value="{{ old('nuptk') }}"
+                                placeholder="0612XXXX" :required="role === 'dosen'"
+                                class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none"
+                                style="display: none;">
+                        </div>
+
+                        <div class="space-y-1.5 relative" x-show="role === 'mahasiswa'"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform -translate-y-2">
+                            <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1">Program
+                                Studi</label>
+                            <input type="hidden" name="prodi" :value="prodi">
+                            <button type="button" @click="dropdownOpen = !dropdownOpen"
+                                class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm flex justify-between items-center hover:border-tsu-teal transition-all">
+                                <span x-text="prodiLabel || 'Pilih Prodi'"
+                                    :class="prodi ? 'text-gray-800' : 'text-gray-400'"></span>
+                                <svg class="h-5 w-5 text-gray-400 transition-transform"
+                                    :class="dropdownOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="dropdownOpen" @click.away="dropdownOpen = false" x-cloak
+                                class="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden">
+                                <ul class="py-2 text-sm text-gray-700 max-h-48 overflow-y-auto custom-scroll">
+                                    <template x-for="item in [
+                                        { val: 'informatika', label: 'Informatika' },
+                                        { val: 'sistem_informasi', label: 'Sistem Informasi' },
+                                        { val: 'teknik_komputer', label: 'Teknik Komputer' },
+                                        { val: 'rekayasa_perangkat_lunak', label: 'Rekayasa Perangkat Lunak' }
+                                    ]">
+                                        <li @click="prodi = item.val; prodiLabel = item.label; dropdownOpen = false"
+                                            class="px-4 py-3 hover:bg-tsu-light hover:text-tsu-teal cursor-pointer transition-colors"
+                                            x-text="item.label"></li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1">Email
+                            Institusi</label>
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="username@tsu.ac.id"
+                            required
+                            class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label
+                                class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1">Password</label>
+                            <div class="relative">
+                                <input :type="showPass ? 'text' : 'password'" name="password" x-model="password"
+                                    placeholder="••••••••" required
+                                    class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none">
+                                <button type="button" @click="showPass = !showPass"
+                                    class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-tsu-teal">
+                                    <svg x-show="!showPass" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg x-show="showPass" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" x-cloak>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label
+                                class="text-[11px] font-bold text-gray-500 uppercase tracking-widest ml-1">Konfirmasi</label>
+                            <div class="relative">
+                                <input :type="showConfirm ? 'text' : 'password'" name="password_confirmation"
+                                    x-model="confirm_password" placeholder="••••••••" required
+                                    :class="confirm_password && password !== confirm_password ? 'border-red-400 ring-red-100' : ''"
+                                    class="w-full bg-gray-50 border border-gray-200 px-4 py-3.5 rounded-2xl text-sm focus:bg-white focus:border-tsu-teal focus:ring-4 focus:ring-tsu-teal/10 outline-none">
+                                <button type="button" @click="showConfirm = !showConfirm"
+                                    class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-tsu-teal">
+                                    <svg x-show="!showConfirm" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg x-show="showConfirm" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" x-cloak>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="confirm_password && password !== confirm_password" x-cloak
+                        class="flex items-center text-red-500 text-[10px] font-bold uppercase tracking-wider ml-1">
+                        <svg class="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Password tidak cocok!
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full bg-tsu-teal text-white font-bold py-4 rounded-2xl hover:bg-tsu-teal-dark shadow-xl shadow-tsu-teal/20 transition-all active:scale-[0.97] hover:-translate-y-1 duration-300">
+                            Daftar Akun
+                        </button>
+                    </div>
+
+                    <p class="text-center text-sm text-gray-500 mt-6">
+                        Sudah punya akun? <a href="/login" class="text-tsu-teal font-bold hover:underline">Masuk</a>
+                    </p>
+                </form>
             </div>
-
-
-                <div id="field-nim">
-                    <label class="block text-black font-medium text-sm mb-1">NIM</label>
-                    <input type="text" name="nim" placeholder="Masukkan NIM" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
-                </div>
-
-                <div id="field-nuptk" class="hidden">
-                    <label class="block text-black font-medium text-sm mb-1">NUPTK</label>
-                    <input type="text" name="nuptk" placeholder="Masukkan NUPTK" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
-                </div>
-
-                <div>
-                    <label class="block text-black font-medium text-sm mb-1">Email</label>
-                    <input type="email" name="email" placeholder="Masukkan Email WAJIB Berdomain @tsu.ac.id" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
-                </div>
-
-                <div>
-                    <label class="block text-black font-medium text-sm mb-1">Password</label>
-                    <input type="password" name="password" placeholder="Masukkan Password" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
-                </div>
-
-                <div id="password-rules" class="mt-2 space-y-1 text-xs">
-                    <p id="rule-length" class="text-gray-400">• Minimal 10 karakter</p>
-                    <p id="rule-upper" class="text-gray-400">• Mengandung huruf besar</p>
-                    <p id="rule-lower" class="text-gray-400">• Mengandung huruf kecil</p>
-                    <p id="rule-number" class="text-gray-400">• Mengandung angka</p>
-                    <p id="rule-symbol" class="text-gray-400">• Mengandung simbol (!@#$)</p>
-                </div>
-
-
-                <div>
-                    <label class="block text-black font-medium text-sm mb-1">Konfirmasi Password</label>
-                    <input type="password" name="password_confirmation" placeholder="Masukkan Konfirmasi Password" 
-                        class="w-full border border-gray-400 px-4 py-2.5 rounded text-sm placeholder-gray-400 italic placeholder:font-light focus:outline-none focus:border-tsu-teal focus:ring-1 focus:ring-tsu-teal transition">
-                </div>
-
-                <div class="text-right">
-                    <a href="/login" class="text-tsu-blue-link text-sm hover:underline font-medium">Sudah punya akun? Masuk</a>
-                </div>
-
-                <button type="submit" class="w-full bg-tsu-teal text-white font-bold py-3 rounded-lg hover:bg-tsu-teal-dark transition shadow-lg mt-2">
-                    Daftar
-                </button>
-            </form>
         </div>
 
-        <div class="hidden lg:flex w-[45%] flex-col justify-center items-center text-center p-8 relative">
-            <h1 class="text-white text-3xl font-bold mb-8 z-10 drop-shadow-md">
-                Temukan Tempat<br>Magang Favorite Kamu
-            </h1>
+        <div
+            class="hidden lg:flex w-[45%] bg-tsu-teal flex-col justify-center items-center relative p-12 overflow-hidden">
+            <div
+                class="absolute top-[-5%] right-[-5%] w-[350px] h-[350px] bg-tsu-teal-dark rounded-full blur-[90px] opacity-60">
+            </div>
+            <div
+                class="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-[#4EA7B2] rounded-full blur-[80px] opacity-40">
+            </div>
 
-            <div class="w-3/4 max-w-sm z-10">
-                <img src="/images/ic_logreg.svg" class="h-30 mb-4" alt="Ilustrasi">
+            <div class="relative z-10 text-center animate-fade-in-up">
+                <div class="animate-float">
+                    <img src="/images/ic_logreg.svg" class="w-full max-w-sm mx-auto mb-12 drop-shadow-2xl"
+                        alt="Illustration">
+                </div>
+                <h2 class="text-white text-4xl font-extrabold mb-6 leading-tight">Gapai Karir<br>Impianmu Sekarang</h2>
+                <p class="text-teal-50 text-base max-w-sm mx-auto leading-relaxed opacity-80">
+                    Platform resmi Universitas Tiga Serangkai untuk manajemen magang mahasiswa yang lebih transparan dan
+                    efisien.
+                </p>
             </div>
         </div>
 
     </div>
-
-    <script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const tabMahasiswa = document.getElementById('tab-mahasiswa');
-    const tabDosen = document.getElementById('tab-dosen');
-    const fieldNim = document.getElementById('field-nim');
-    const fieldProdi = document.getElementById('field-prodi');
-    const fieldNuptk = document.getElementById('field-nuptk');
-    const inputNama = document.getElementById('input-nama');
-    const roleInput = document.getElementById('role-input');
-    const inputNim   = document.querySelector('input[name="nim"]');
-    const inputProdi = document.querySelector('select[name="prodi"]');
-    const inputNuptk = document.querySelector('input[name="nuptk"]');
-
-    const passwordInput = document.querySelector('input[name="password"]');
-    const rules = {
-        length: document.getElementById('rule-length'),
-        upper: document.getElementById('rule-upper'),
-        lower: document.getElementById('rule-lower'),
-        number: document.getElementById('rule-number'),
-        symbol: document.getElementById('rule-symbol'),
-    };
-
-    function setActiveTab(role) {
-
-    roleInput.value = role;
-
-    if (role === 'mahasiswa') {
-        tabMahasiswa.classList.add('bg-tsu-teal','text-white');
-        tabMahasiswa.classList.remove('bg-white','text-black','hover:bg-gray-50');
-
-        tabDosen.classList.add('bg-white','text-black','hover:bg-gray-50');
-        tabDosen.classList.remove('bg-tsu-teal','text-white');
-
-        fieldNim.classList.remove('hidden');
-        fieldNuptk.classList.add('hidden');
-        fieldProdi.classList.remove('hidden');
-
-        inputNim.required = true;     
-        inputProdi.required = true;   
-
-        inputNuptk.required = false;
-
-        // Agar tidak ada bug inputan 
-        inputNuptk.value = '';
-    }
-
-    if (role === 'dosen') {
-        tabDosen.classList.add('bg-tsu-teal','text-white');
-        tabDosen.classList.remove('bg-white','text-black','hover:bg-gray-50');
-
-        tabMahasiswa.classList.add('bg-white','text-black','hover:bg-gray-50');
-        tabMahasiswa.classList.remove('bg-tsu-teal','text-white');
-
-        fieldNuptk.classList.remove('hidden');
-        fieldNim.classList.add('hidden');
-        fieldProdi.classList.add('hidden');
-
-        inputNuptk.required = true;   
-
-        // Mematikan Required Mahasiswa saat melakukan input dosen 
-        inputNim.required = false;    
-        inputProdi.required = false;
-
-        // Jika ada inputan di dosen bisa kosong dan tidak terjadi bug
-        inputNim.value = '';
-        inputProdi.value = '';
-    }
-}
-
-    function toggleRule(element, isValid) {
-        if (isValid) {
-            element.classList.remove('text-gray-400');
-            element.classList.add('text-green-600');
-        } else {
-            element.classList.remove('text-green-600');
-            element.classList.add('text-gray-400');
-        }
-    }
-
-    tabMahasiswa.addEventListener('click', () => setActiveTab('mahasiswa'));
-    tabDosen.addEventListener('click', () => setActiveTab('dosen'));
-    passwordInput.addEventListener('input', function () {
-    const value = passwordInput.value;
-
-    toggleRule(rules.length, value.length >= 10);
-    toggleRule(rules.upper, /[A-Z]/.test(value));
-    toggleRule(rules.lower, /[a-z]/.test(value));
-    toggleRule(rules.number, /\d/.test(value));
-    toggleRule(rules.symbol, /[^A-Za-z0-9]/.test(value));
-});
-    setActiveTab('mahasiswa');
-});
-</script>
 </body>
+
 </html>
