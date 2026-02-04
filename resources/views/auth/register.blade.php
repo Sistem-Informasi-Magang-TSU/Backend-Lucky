@@ -237,6 +237,26 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                                <span class="text-[10px] flex items-center font-medium transition-colors duration-300"
+                                    :class="/[A-Z]/.test(password) ? 'text-green-600' : 'text-gray-400'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg> 1 Huruf Besar
+                                </span>
+                                <span class="text-[10px] flex items-center font-medium transition-colors duration-300"
+                                    :class="/[0-9]/.test(password) ? 'text-green-600' : 'text-gray-400'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" viewBox="0 0 20 20"
+                                        fill="currentColor">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd" />
+                                    </svg> 1 Angka
+                                </span>
+                            </div>
                         </div>
 
                         <div class="space-y-1.5">
