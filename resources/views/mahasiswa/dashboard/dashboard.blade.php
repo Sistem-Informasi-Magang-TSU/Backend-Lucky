@@ -107,16 +107,18 @@
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 bg-teal-50 text-tsu-teal rounded-2xl flex items-center justify-center font-bold">
-                                12</div>
+                                {{ $logbookCount }}
+                            </div>
                             <div>
                                 <p class="text-sm font-bold">Logbook Diisi</p>
-                                <p class="text-[10px] text-gray-400">Total bulan ini</p>
+                                <p class="text-[10px] text-gray-400">Total selama magang</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 bg-blue-50 text-tsu-blue rounded-2xl flex items-center justify-center font-bold">
-                                02</div>
+                                {{ $pendaftaranCount }}
+                            </div>
                             <div>
                                 <p class="text-sm font-bold">Program Dilamar</p>
                                 <p class="text-[10px] text-gray-400">Menunggu verifikasi</p>

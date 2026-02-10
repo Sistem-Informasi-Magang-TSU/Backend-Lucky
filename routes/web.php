@@ -62,7 +62,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
         $pengumumans = Pengumuman::where('status', 'aktif')->latest()->take(5)->get();
-        return view('mahasiswa.dashboard.dashboard', compact('pengumumans'));
+        $mahasiswa = auth()->user()->mahasiswa;
+        $logbookCount = $mahasiswa ? $mahasiswa->logbook()->count() : 0;
+        $pendaftaranCount = $mahasiswa ? $mahasiswa->pendaftaran()->count() : 0;
+
+        return view('mahasiswa.dashboard.dashboard', compact('pengumumans', 'logbookCount', 'pendaftaranCount'));
     })->name('mahasiswa.dashboard');
 
     /*
@@ -129,7 +133,10 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
 
     Route::get('/dosen/dashboard', function () {
         $pengumumans = Pengumuman::where('status', 'aktif')->latest()->take(5)->get();
-        return view('mahasiswa.dashboard.dashboard', compact('pengumumans'));
+        // Dosen doesn't have logbook/pendaftaran in the same way, defaulting to 0 for view compatibility
+        $logbookCount = 0;
+        $pendaftaranCount = 0;
+        return view('mahasiswa.dashboard.dashboard', compact('pengumumans', 'logbookCount', 'pendaftaranCount'));
     })->name('dosen.dashboard');
 
     Route::get(
