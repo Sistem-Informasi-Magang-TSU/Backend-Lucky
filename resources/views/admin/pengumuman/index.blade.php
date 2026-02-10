@@ -15,6 +15,16 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="bg-red-50 border border-red-200 text-red-800 rounded-2xl p-4 flex items-center gap-3 fade-up">
+                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-bold">{{ session('error') }}</span>
+            </div>
+        @endif
+
         <div class="flex justify-between items-center fade-up">
             <div>
                 <h3 class="text-xl font-bold text-gray-800">Daftar Pengumuman</h3>
@@ -34,6 +44,10 @@
                         <div
                             class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-bold uppercase">
                             {{ $p->status ?? 'Aktif' }}
+                        </div>
+                        <div
+                            class="absolute top-4 left-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-bold uppercase">
+                            {{ $p->jenis_pengumuman ?? 'Info' }}
                         </div>
                         <h4 class="text-white font-bold text-lg mt-4 truncate" title="{{ $p->judul }}">{{ $p->judul }}</h4>
                         <p class="text-indigo-50/80 text-xs">{{ $p->created_at->format('d M Y') }}</p>
@@ -90,6 +104,28 @@
                 </div>
 
                 <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2">Jenis Pengumuman</label>
+                    <select name="jenis_pengumuman" id="jenis_pengumuman"
+                        class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-tsu-teal transition mt-1"
+                        required>
+                        <option value="info">Info</option>
+                        <option value="warning">Warning</option>
+                        <option value="danger">Danger</option>
+                        <option value="success">Success</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-2">Status</label>
+                    <select name="status" id="status"
+                        class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-tsu-teal transition mt-1"
+                        required>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
+                    </select>
+                </div>
+
+                <div>
                     <label class="text-xs font-bold text-gray-400 uppercase ml-2">Isi Pengumuman</label>
                     <textarea name="isi" id="isi" rows="4"
                         class="w-full bg-gray-50 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-tsu-teal transition mt-1"
@@ -134,6 +170,8 @@
 
             document.getElementById('judul').value = p.judul;
             document.getElementById('isi').value = p.isi;
+            document.getElementById('jenis_pengumuman').value = p.jenis_pengumuman;
+            document.getElementById('status').value = p.status;
         }
 
         function closePengumumanModal() {

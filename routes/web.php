@@ -167,7 +167,7 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
 
     // ===================
     // ROUTE ADMIN

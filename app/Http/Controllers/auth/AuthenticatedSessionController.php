@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $url = match ($request->user()->role) {
-            'admin' => route('admin.dashboard', absolute: false),
+            'admin' => route('admin.pengumuman.index', absolute: false),
             'dosen' => route('dosen.dashboard', absolute: false),
             default => route('mahasiswa.dashboard', absolute: false),
         };
