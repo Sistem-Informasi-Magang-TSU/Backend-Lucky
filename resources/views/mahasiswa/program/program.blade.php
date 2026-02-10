@@ -7,15 +7,28 @@
 @section('content')
 
     @php
-        // Map backend data to the format expected by AlpineJS
         $jobs = $programs->map(function ($program) {
-            // Map jenis_bkp to the tab IDs used in the new layout
-            $type = 'magang'; // Default
-            if ($program->jenis_bkp === 'Studi Independen') {
-                $type = 'studi';
-            } elseif ($program->jenis_bkp === 'Magang Mandiri') {
-                $type = 'magang';
-            }
+
+            // Ambil 2 huruf prefix id_program
+            $prefix = strtoupper(substr($program->id_program ?? '', 0, 2));
+
+            // Group tab berdasarkan prefix
+            // PENTING: Value harus sama dengan ID di categories AlpineJS
+            $map = [
+                'PM' => 'pertukaran',
+                'MM' => 'magang',
+                'MG' => 'magang',
+                'KT' => 'kkn-tematik',
+                'KM' => 'kampus-mengajar',
+                'RS' => 'riset',
+                'KW' => 'kewirausahaan',
+                'PI' => 'proyek-independen', 
+                'SI' => 'studi',
+                'PK' => 'kemanusiaan',
+                'BN' => 'bela-negara',
+            ];
+
+            $type = $map[$prefix] ?? 'magang';
 
             return [
                 'id' => $program->id_program,
@@ -27,14 +40,10 @@
             ];
         });
 
-        // Helper for generating route prefix if needed elsewhere, though links are pre-generated above
-        $rolePrefix = 'mahasiswa';
-        if (request()->is('dosen*')) {
-            $rolePrefix = 'dosen';
-        } elseif (request()->is('admin*')) {
-            $rolePrefix = 'admin';
-        }
+        // Generate tab otomatis dari hasil grouping
+        $tabs = $jobs->pluck('type')->unique()->values();
     @endphp
+
 
     <style>
         html {
@@ -70,30 +79,30 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <div x-data="{ 
-            tab: 'magang', 
-            page: 1, 
-            perPage: 6,
-            categories: [
-                { id: 'magang', name: 'Magang', icon: '💼' },
-                { id: 'studi', name: 'Studi Independen', icon: '📚' },
-                { id: 'kewirausahaan', name: 'Kewirausahaan', icon: '🚀' },
-                { id: 'kampus-mengajar', name: 'Kampus Mengajar', icon: '👨‍🏫' },
-                { id: 'kkn-tematik', name: 'KKN Tematik', icon: '🏘️' },
-                { id: 'riset', name: 'Riset', icon: '🔬' },
-                { id: 'proyek-independen', name: 'Studi/Proyek Independent', icon: '🛠️' },
-                { id: 'kemanusiaan', name: 'Program Kemanusiaan', icon: '🤝' },
-                { id: 'pertukaran', name: 'Pertukaran Mahasiswa', icon: '🌏' }
-            ],
-            jobs: {{ Js::from($jobs) }},
-            get filteredJobs() {
-                let filtered = this.jobs.filter(j => j.type === this.tab);
-                return filtered.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-            },
-            get totalPages() {
-                let count = this.jobs.filter(j => j.type === this.tab).length;
-                return count > 0 ? Math.ceil(count / this.perPage) : 1;
-            }
-        }">
+                tab: 'magang', 
+                page: 1, 
+                perPage: 6,
+                categories: [
+                    { id: 'magang', name: 'Magang', icon: '💼' },
+                    { id: 'studi', name: 'Studi Independen', icon: '📚' },
+                    { id: 'kewirausahaan', name: 'Kewirausahaan', icon: '🚀' },
+                    { id: 'kampus-mengajar', name: 'Kampus Mengajar', icon: '👨‍🏫' },
+                    { id: 'kkn-tematik', name: 'KKN Tematik', icon: '🏘️' },
+                    { id: 'riset', name: 'Riset', icon: '🔬' },
+                    { id: 'proyek-independen', name: 'Studi/Proyek Independent', icon: '🛠️' },
+                    { id: 'kemanusiaan', name: 'Program Kemanusiaan', icon: '🤝' },
+                    { id: 'pertukaran', name: 'Pertukaran Mahasiswa', icon: '🌏' }
+                ],
+                jobs: {{ Js::from($jobs) }},
+                get filteredJobs() {
+                    let filtered = this.jobs.filter(j => j.type === this.tab);
+                    return filtered.slice((this.page - 1) * this.perPage, this.page * this.perPage);
+                },
+                get totalPages() {
+                    let count = this.jobs.filter(j => j.type === this.tab).length;
+                    return count > 0 ? Math.ceil(count / this.perPage) : 1;
+                }
+            }">
 
         <div class="fade-up bg-tsu-teal text-white rounded-2xl p-8 mb-8 shadow-lg relative overflow-hidden">
             <div class="relative z-10">
