@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\ProgramMagang;
 use App\Models\Pendaftaran;
 use App\Models\BerkasMahasiswa;
+use App\Models\Mahasiswa;
 
 class ProgramMagangTampilController extends Controller
 {
     public function index()
     {
         $programs = ProgramMagang::with('mitra')->get();
-        return view('mahasiswa.program.program', compact('programs'));
+
+        $jumlahPeserta = Mahasiswa::count();
+        $pesertaAktif = Pendaftaran::where('status', 'diterima')->count();
+        $pesertaLulus = Pendaftaran::where('status', 'lulus')->count();
+
+        return view('mahasiswa.program.program', compact('programs', 'jumlahPeserta', 'pesertaAktif', 'pesertaLulus'));
     }
 
     public function show($id_program)

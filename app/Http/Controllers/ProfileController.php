@@ -1,12 +1,5 @@
 <?php
 
-/**
- * LEGACY CONTROLLER
- * Digunakan sebelum implementasi Laravel Breeze
- * Disimpan untuk dokumentasi & pembelajaran
- */
-
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;

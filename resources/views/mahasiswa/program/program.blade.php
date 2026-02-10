@@ -22,7 +22,7 @@
                 'KM' => 'kampus-mengajar',
                 'RS' => 'riset',
                 'KW' => 'kewirausahaan',
-                'PI' => 'proyek-independen', 
+                'PI' => 'proyek-independen',
                 'SI' => 'studi',
                 'PK' => 'kemanusiaan',
                 'BN' => 'bela-negara',
@@ -79,30 +79,30 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <div x-data="{ 
-                tab: 'magang', 
-                page: 1, 
-                perPage: 6,
-                categories: [
-                    { id: 'magang', name: 'Magang', icon: '💼' },
-                    { id: 'studi', name: 'Studi Independen', icon: '📚' },
-                    { id: 'kewirausahaan', name: 'Kewirausahaan', icon: '🚀' },
-                    { id: 'kampus-mengajar', name: 'Kampus Mengajar', icon: '👨‍🏫' },
-                    { id: 'kkn-tematik', name: 'KKN Tematik', icon: '🏘️' },
-                    { id: 'riset', name: 'Riset', icon: '🔬' },
-                    { id: 'proyek-independen', name: 'Studi/Proyek Independent', icon: '🛠️' },
-                    { id: 'kemanusiaan', name: 'Program Kemanusiaan', icon: '🤝' },
-                    { id: 'pertukaran', name: 'Pertukaran Mahasiswa', icon: '🌏' }
-                ],
-                jobs: {{ Js::from($jobs) }},
-                get filteredJobs() {
-                    let filtered = this.jobs.filter(j => j.type === this.tab);
-                    return filtered.slice((this.page - 1) * this.perPage, this.page * this.perPage);
-                },
-                get totalPages() {
-                    let count = this.jobs.filter(j => j.type === this.tab).length;
-                    return count > 0 ? Math.ceil(count / this.perPage) : 1;
-                }
-            }">
+                    tab: 'magang', 
+                    page: 1, 
+                    perPage: 6,
+                    categories: [
+                        { id: 'magang', name: 'Magang', icon: '💼' },
+                        { id: 'studi', name: 'Studi Independen', icon: '📚' },
+                        { id: 'kewirausahaan', name: 'Kewirausahaan', icon: '🚀' },
+                        { id: 'kampus-mengajar', name: 'Kampus Mengajar', icon: '👨‍🏫' },
+                        { id: 'kkn-tematik', name: 'KKN Tematik', icon: '🏘️' },
+                        { id: 'riset', name: 'Riset', icon: '🔬' },
+                        { id: 'proyek-independen', name: 'Studi/Proyek Independent', icon: '🛠️' },
+                        { id: 'kemanusiaan', name: 'Program Kemanusiaan', icon: '🤝' },
+                        { id: 'pertukaran', name: 'Pertukaran Mahasiswa', icon: '🌏' }
+                    ],
+                    jobs: {{ Js::from($jobs) }},
+                    get filteredJobs() {
+                        let filtered = this.jobs.filter(j => j.type === this.tab);
+                        return filtered.slice((this.page - 1) * this.perPage, this.page * this.perPage);
+                    },
+                    get totalPages() {
+                        let count = this.jobs.filter(j => j.type === this.tab).length;
+                        return count > 0 ? Math.ceil(count / this.perPage) : 1;
+                    }
+                }">
 
         <div class="fade-up bg-tsu-teal text-white rounded-2xl p-8 mb-8 shadow-lg relative overflow-hidden">
             <div class="relative z-10">
@@ -213,15 +213,15 @@
             <h3 class="text-lg font-bold mb-6">Jumlah Peserta Yang Telah Bergabung</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="text-center p-6 rounded-2xl bg-red-50/50 border border-red-80">
-                    <div class="text-4xl font-bold text-tsu-red mb-1">30</div>
+                    <div class="text-4xl font-bold text-tsu-red mb-1">{{ $jumlahPeserta }}</div>
                     <div class="text-sm font-medium text-gray-600">Peserta Terdaftar</div>
                 </div>
                 <div class="text-center p-6 rounded-2xl bg-green-50/50 border border-green-80">
-                    <div class="text-4xl font-bold text-green-500 mb-1">10</div>
+                    <div class="text-4xl font-bold text-green-500 mb-1">{{ $pesertaAktif }}</div>
                     <div class="text-sm font-medium text-gray-600">Peserta Aktif</div>
                 </div>
                 <div class="text-center p-6 rounded-2xl bg-blue-50/50 border border-blue-80">
-                    <div class="text-4xl font-bold text-tsu-blue mb-1">50</div>
+                    <div class="text-4xl font-bold text-tsu-blue mb-1">{{ $pesertaLulus }}</div>
                     <div class="text-sm font-medium text-gray-600">Peserta Lulus</div>
                 </div>
             </div>
