@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\PendaftaranController as AdminPendaftaranController;
 
 
+use App\Models\Pengumuman;
+
 Route::get('/whoami', function () {
     return response()->json([
         'authenticated' => auth()->check(),
@@ -58,8 +60,10 @@ Route::middleware('guest')->group(function () {
 // Semua halaman yang butuh login
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', fn() => view('mahasiswa.dashboard.dashboard'))
-        ->name('mahasiswa.dashboard');
+    Route::get('/dashboard', function () {
+        $pengumumans = Pengumuman::where('status', 'aktif')->latest()->take(5)->get();
+        return view('mahasiswa.dashboard.dashboard', compact('pengumumans'));
+    })->name('mahasiswa.dashboard');
 
     /*
     Route::get(
@@ -124,7 +128,8 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
 
 
     Route::get('/dosen/dashboard', function () {
-        return view('mahasiswa.dashboard.dashboard');
+        $pengumumans = Pengumuman::where('status', 'aktif')->latest()->take(5)->get();
+        return view('mahasiswa.dashboard.dashboard', compact('pengumumans'));
     })->name('dosen.dashboard');
 
     Route::get(
