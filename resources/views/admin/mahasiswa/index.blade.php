@@ -14,10 +14,20 @@
         
         <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
             @php
-                $adminRole = request()->get('role', 'fakultas');
+                $userRole = auth()->user()->role;
+                $isAdminUniversitas = $userRole === 'admin_universitas';
+                $isAdminProdi = $userRole === 'admin_prodi';
+                $requestRole = request()->get('role');
+                
+                // If admin_universitas or admin_prodi, force role to 'universitas' for view compatibility
+                if ($isAdminUniversitas || $isAdminProdi) {
+                    $adminRole = 'universitas';
+                } else {
+                    $adminRole = $requestRole ?? 'fakultas';
+                }
             @endphp
 
-            @if($adminRole == 'universitas')
+            @if($adminRole == 'universitas' && !$isAdminProdi)
             <select id="filterFakultas" class="bg-white border-none rounded-2xl py-3 px-4 shadow-sm focus:ring-2 focus:ring-tsu-teal text-sm font-medium text-gray-600 outline-none">
                 <option value="">Semua Fakultas</option>
                 <option value="FTI">Fakultas Teknologi Informasi</option>
@@ -26,7 +36,7 @@
             </select>
             @endif
 
-            @if($adminRole == 'universitas' || $adminRole == 'fakultas')
+            @if(($adminRole == 'universitas' || $adminRole == 'fakultas') && !$isAdminProdi)
             <select id="filterProdi" class="bg-white border-none rounded-2xl py-3 px-4 shadow-sm focus:ring-2 focus:ring-tsu-teal text-sm font-medium text-gray-600 outline-none">
                 <option value="">Semua Program Studi</option>
                 <option value="Informatika">Informatika</option>
@@ -122,6 +132,55 @@
             }
         });
     }
+
+    // Filter Logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterFakultas = document.getElementById('filterFakultas');
+        const filterProdi = document.getElementById('filterProdi');
+
+        function applyFilters() {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (filterFakultas) {
+                if (filterFakultas.value) {
+                    params.set('fakultas', filterFakultas.value);
+                } else {
+                    params.delete('fakultas');
+                }
+            }
+
+            if (filterProdi) {
+                if (filterProdi.value) {
+                    params.set('prodi', filterProdi.value);
+                } else {
+                    params.delete('prodi');
+                }
+            }
+
+            // Preserve role if exists
+            // Role is already in params if it was in the URL
+            
+            window.location.search = params.toString();
+        }
+
+        if (filterFakultas) {
+            // Set initial value from URL
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('fakultas')) {
+                filterFakultas.value = params.get('fakultas');
+            }
+            filterFakultas.addEventListener('change', applyFilters);
+        }
+
+        if (filterProdi) {
+            // Set initial value from URL
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('prodi')) {
+                filterProdi.value = params.get('prodi');
+            }
+            filterProdi.addEventListener('change', applyFilters);
+        }
+    });
 
     function viewFullDetail(name, prodi) {
         const modal = document.getElementById('modalDetailMhs');

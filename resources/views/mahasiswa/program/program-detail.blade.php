@@ -206,6 +206,7 @@
                 text: "Setelah mendaftar, Anda tidak dapat membatalkan pendaftaran ini. Yakin ingin melanjutkan?",
                 icon: 'question',
                 showCancelButton: true,
+<<<<<<< HEAD
                 confirmButtonColor: '#086375',
                 cancelButtonColor: '#aaa',
                 confirmButtonText: 'Ya, Daftar Sekarang',
@@ -214,6 +215,48 @@
                 if (result.isConfirmed) {
                     performRegistration();
                 }
+=======
+                confirmButtonText: 'Ya, Daftar'
+            }).then(result => {
+                if (!result.isConfirmed) return;
+
+                fetch("{{ route('pendaftaran.store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        program_id: @json($program->id_program)
+                    })
+                })
+                    .then(async response => {
+                        const data = await response.json();
+                        if (!response.ok) {
+                            // Throw error with message from server if available
+                            throw new Error(data.message || 'Terjadi kesalahan pada server.');
+                        }
+                        return data;
+                    })
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error(data.message || 'Pendaftaran gagal.');
+                        }
+
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Pendaftaran berhasil!',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.href = "{{ route('mahasiswa.dashboard') }}";
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire('Gagal', error.message, 'error');
+                    });
+>>>>>>> 4bd29f5 (Admin Univ & Admin Prodi donee)
             });
         }
 

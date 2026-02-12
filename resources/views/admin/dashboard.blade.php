@@ -5,6 +5,7 @@
 
 @section('content')
 <div class="space-y-6">
+    @if(auth()->user()->role === 'admin')
     <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 fade-up">
         <div class="flex items-center justify-between mb-6">
             <div>
@@ -34,6 +35,7 @@
             </div>
         </form>
     </div>
+    @endif
 
     <div class="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm fade-up delay-100">
         <div class="flex items-center gap-3 mb-6">
@@ -46,11 +48,13 @@
             <div class="bg-gray-50 p-5 rounded-3xl border-l-4 border-{{ $loop->first ? 'tsu-teal' : 'tsu-orange' }} relative group transition-all hover:bg-white hover:shadow-md">
                 <div class="flex justify-between items-start mb-1">
                     <p class="font-bold text-gray-800">{{ $p->judul }}</p>
+                    @if(auth()->user()->role === 'admin')
                     <form action="/admin/pengumuman/{{ $p->id }}" method="POST" onsubmit="return confirm('Hapus pengumuman ini?');" class="opacity-0 group-hover:opacity-100 transition-opacity">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-red-500 hover:text-red-700 text-xs">Hapus</button>
                     </form>
+                    @endif
                 </div>
                 <p class="text-xs text-gray-500 line-clamp-2 mb-2">{{ $p->isi }}</p>
                 <p class="text-[10px] text-gray-400 font-medium">🕒 {{ $p->created_at->diffForHumans() }}</p>

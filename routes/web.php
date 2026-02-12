@@ -178,12 +178,25 @@ Route::middleware(['auth', 'role:dosen'])->group(function () {
         ->name('dosen.penilaian.store');
 });
 
+
+// ===================
+// ROUTE ADMIN (SEMUA ADMIN)
+// ===================
+Route::middleware(['auth', 'role:admin|admin_universitas|admin_prodi'])->group(function () {
+
+    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+
+    Route::get('/admin/mahasiswa', [DataMahasiswaController::class, 'index'])
+        ->name('admin.mahasiswa.index');
+});
+
+
+// ===================
+// ROUTE ADMIN FULL (ADMIN FAKULTAS)
+// ===================
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
-
-    // ===================
-    // ROUTE ADMIN
-    // ===================
     Route::get('/admin/program', [ProgramController::class, 'index'])->name('admin.program.index');
     Route::post('/admin/program', [ProgramController::class, 'store'])->name('admin.program.store');
     Route::put('/admin/program/{id}', [ProgramController::class, 'update'])->name('admin.program.update');
@@ -192,14 +205,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/pendaftaran', [AdminPendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
     Route::put('/admin/pendaftaran/{id}', [AdminPendaftaranController::class, 'update'])->name('admin.pendaftaran.update');
 
-    Route::get('/admin/mahasiswa', [DataMahasiswaController::class, 'index'])->name('admin.mahasiswa.index');
-
-    // Pengumuman Routes
     Route::get('/admin/pengumuman', [PengumumanController::class, 'index'])->name('admin.pengumuman.index');
     Route::post('/admin/pengumuman', [PengumumanController::class, 'store'])->name('admin.pengumuman.store');
     Route::put('/admin/pengumuman/{id}', [PengumumanController::class, 'update'])->name('admin.pengumuman.update');
     Route::delete('/admin/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('admin.pengumuman.destroy');
 });
+
 
 // AUTH BREEZE
 require __DIR__ . '/auth.php';

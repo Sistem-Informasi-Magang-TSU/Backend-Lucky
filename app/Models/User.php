@@ -24,6 +24,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'role',
+        'prodi',
         'name',     // default Jetstream field
         'email',
         'password',
